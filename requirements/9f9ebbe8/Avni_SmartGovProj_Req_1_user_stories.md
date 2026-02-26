@@ -13,8 +13,8 @@ Admin can create a new user account.
 
 **Linked FRs:** FR1
 
-### US2: Set User Roles
-Admin can assign roles to users.
+### US2: Define User Roles
+Admin can define user roles.
 
 **Acceptance Criteria:**
 - AC1
@@ -40,7 +40,7 @@ User can update personal profile details.
 **Linked FRs:** FR4
 
 ### US5: Deactivate User Accounts
-Admin can deactivate inactive or expired user accounts.
+System deactivates inactive or expired user accounts.
 
 **Acceptance Criteria:**
 - AC1
@@ -74,7 +74,7 @@ Librarian can delete book records.
 **Linked FRs:** FR7
 
 ### US9: Categorize Books
-Books can be categorized for easy browsing.
+System categorizes books for easy browsing.
 
 **Acceptance Criteria:**
 - AC1
@@ -83,26 +83,26 @@ Books can be categorized for easy browsing.
 
 ## Sprint Week 4: Search and Discovery
 
-### US10: Bulk Book Import
-Support for bulk book import (optional).
+### US10: Import Books in Bulk
+System supports bulk book import.
 
 **Acceptance Criteria:**
 - AC1
 
 **Linked FRs:** FR10
 
-### US11: Search Books by Title
-User can search books by title.
+### US11: Search Books by Title, Author, ISBN, or Category
+User can search books by title, author, ISBN, or category.
 
 **Acceptance Criteria:**
 - AC1
 
 **Linked FRs:** FR11
 
-### US12: Search Books by Author
-User can search books by author.
+### US12: Display Book Availability Status
+System displays book availability status.
 
 **Acceptance Criteria:**
 - AC1
 
-**Linked FRs:** FR11
+**Linked FRs:** FR12
