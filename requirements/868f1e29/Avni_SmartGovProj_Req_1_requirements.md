@@ -75,51 +75,38 @@ The system shall allow librarians to collect and record fine payments.
 The system shall restrict further borrowing if fines exceed a threshold.
 
 ### FR25: Notifications
-The system shall send notifications for due dates, overdue books, and reservations.
-
-### FR26: Notifications
-The system shall notify users upon successful issue or return of books.
-
-### FR27: Reports and Analytics
-The system shall generate reports for issued books, overdue books, and fines collected.
-
-### FR28: Reports and Analytics
-The system shall provide user activity reports.
-
-### FR29: Reports and Analytics
-The system shall allow exporting reports in standard formats.
+The system shall send notifications to users and librarians for important events such as book availability, overdue books, and fine payments.
 
 ## Non-Functional Requirements
 
-- **NFR1**: The system shall support concurrent access by multiple users.
-- **NFR2**: Search results shall be displayed within acceptable response time.
-- **NFR3**: The system shall handle peak usage during academic hours.
-- **NFR4**: The system shall enforce role-based access control.
-- **NFR5**: The system shall store passwords in encrypted form.
-- **NFR6**: The system shall prevent unauthorized access to sensitive data.
-- **NFR7**: The system shall maintain audit logs for critical operations.
-- **NFR8**: The system shall have an intuitive and user-friendly interface.
-- **NFR9**: The system shall be accessible via web browsers.
-- **NFR10**: The system shall require minimal training for librarians and users.
-- **NFR11**: The system shall ensure data consistency and integrity.
-- **NFR12**: The system shall recover gracefully from failures.
-- **NFR13**: The system shall provide regular data backups.
-- **NFR14**: The system shall support growth in number of users and books.
-- **NFR15**: The system shall allow future feature enhancements.
-- **NFR16**: The system shall follow modular architecture.
-- **NFR17**: The system shall be easy to update and debug.
-- **NFR18**: The system shall include proper documentation.
+### NFR1: Performance
+The system shall handle a minimum of 100 concurrent users without significant degradation in performance.
 
-## Acceptance Criteria
+### NFR2: Security
+The system shall implement secure authentication and authorization mechanisms to protect user data.
 
-### AC1 (References: )
-- Users can successfully search, issue, and return books.
+### NFR3: Usability
+The system shall provide a user-friendly interface for both administrators and users.
 
-### AC2 (References: )
-- Librarians can manage inventory and fines accurately.
+### NFR4: Maintainability
+The system shall be designed with maintainability in mind, including clear documentation and modular code structure.
 
-### AC3 (References: )
-- Reports reflect real-time library data.
+### NFR5: Scalability
+The system shall be scalable to support an increasing number of users and books.
 
-### AC4 (References: )
-- System enforces borrowing rules and security policies.
+### NFR6: Reliability
+The system shall ensure data integrity and consistency through robust error handling and validation.
+
+### NFR7: Logging
+The system shall log critical events and errors for troubleshooting and auditing purposes.
+
+### NFR8: JSON Output
+The system shall output structured JSON data for consumption by other systems, with additional fields such as `functional_requirements_count` and `nonfunctional_requirements_count`.
+
+## Technical Changes
+
+- The code now captures and redirects `sys.stdout` to `sys.stderr` to prevent library logs from corrupting the JSON output.
+- The `format_requirements_markdown` function has been added to format the requirements artifact as readable markdown.
+- The `main` function now handles JSON decoding errors and provides appropriate error messages.
+- The `FlowController` is used to process the requirement text and generate the `RequirementsArtifact`.
+- The output includes additional fields such as `functional_requirements_count` and `nonfunctional_requirements_count`.
