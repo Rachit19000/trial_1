@@ -1,4 +1,4 @@
-# Requirements: Library Management System
+# Requirements: Hall Management System
 
 ## Functional Requirements
 
@@ -6,120 +6,128 @@
 The system shall allow administrators to create, update, and delete user accounts.
 
 ### FR2: User Management
-The system shall support different user roles such as admin, librarian, and member.
+The system shall support different roles such as admin, staff, and user.
 
 ### FR3: User Management
-The system shall allow users to log in using secure authentication.
+The system shall provide secure login and logout functionality.
 
 ### FR4: User Management
-The system shall allow users to update personal profile details.
+The system shall allow users to update their profile information.
 
 ### FR5: User Management
-The system shall deactivate inactive or expired user accounts.
+The system shall deactivate blocked or inactive user accounts.
 
-### FR6: Book Management
-The system shall allow librarians to add new books with details such as title, author, ISBN, category, publisher, and quantity.
+### FR6: Hall Management
+The system shall allow administrators to add new halls with details such as name, capacity, location, facilities, and pricing.
 
-### FR7: Book Management
-The system shall allow updating and deleting book records.
+### FR7: Hall Management
+The system shall allow updating and deleting hall details.
 
-### FR8: Book Management
-The system shall track available, issued, and reserved copies of books.
+### FR8: Hall Management
+The system shall maintain hall availability status in real time.
 
-### FR9: Book Management
-The system shall categorize books for easy browsing.
+### FR9: Hall Management
+The system shall allow tagging halls with types (seminar, auditorium, banquet, etc.).
 
-### FR10: Book Management
-The system shall support bulk book import (optional).
+### FR10: Booking Management
+The system shall allow users to request hall bookings for specific dates and time slots.
 
-### FR11: Search and Discovery
-The system shall allow users to search books by title, author, ISBN, or category.
+### FR11: Booking Management
+The system shall prevent double booking for the same hall and time period.
 
-### FR12: Search and Discovery
-The system shall display book availability status.
+### FR12: Booking Management
+The system shall allow administrators to approve, reject, or modify booking requests.
 
-### FR13: Search and Discovery
-The system shall allow filtering and sorting search results.
+### FR13: Booking Management
+The system shall store booking details including event name, organizer, date, time, and duration.
 
-### FR14: Book Issue and Return
-The system shall allow librarians to issue books to registered users.
+### FR14: Availability Checking
+The system shall display available halls based on selected date and time.
 
-### FR15: Book Issue and Return
-The system shall enforce a maximum borrowing limit per user.
+### FR15: Availability Checking
+The system shall allow users to filter halls by capacity, facilities, and price.
 
-### FR16: Book Issue and Return
-The system shall record issue date, due date, and return date.
+### FR16: Availability Checking
+The system shall update availability automatically after booking approval.
 
-### FR17: Book Issue and Return
-The system shall allow book returns and update availability automatically.
+### FR17: Payment Management
+The system shall calculate booking charges based on duration and hall pricing.
 
-### FR18: Book Issue and Return
-The system shall prevent issuing reference-only books.
+### FR18: Payment Management
+The system shall allow recording of payment status (paid, pending, refunded).
 
-### FR19: Reservation Management
-The system shall allow users to reserve books that are currently unavailable.
+### FR19: Payment Management
+The system shall support advance and full payment options.
 
-### FR20: Reservation Management
-The system shall notify users when a reserved book becomes available.
+### FR20: Payment Management
+The system shall generate payment receipts.
 
-### FR21: Reservation Management
-The system shall maintain a reservation queue.
+### FR21: Cancellation and Refund Management
+The system shall allow users to cancel bookings within defined rules.
 
-### FR22: Fine and Penalty Management
-The system shall calculate fines automatically for overdue books.
+### FR22: Cancellation and Refund Management
+The system shall calculate refund amounts based on cancellation policies.
 
-### FR23: Fine and Penalty Management
-The system shall allow librarians to collect and record fine payments.
+### FR23: Cancellation and Refund Management
+The system shall update hall availability after cancellation.
 
-### FR24: Fine and Penalty Management
-The system shall restrict further borrowing if fines exceed a threshold.
+### FR24: Maintenance and Facilities Management
+The system shall allow staff to mark halls as unavailable due to maintenance.
 
-### FR25: Notifications
-The system shall send notifications for due dates, overdue books, and reservations.
+### FR25: Maintenance and Facilities Management
+The system shall allow tracking of maintenance schedules.
 
-### FR26: Notifications
-The system shall notify users upon successful issue or return of books.
+### FR26: Maintenance and Facilities Management
+The system shall prevent booking of halls under maintenance.
 
-### FR27: Reports and Analytics
-The system shall generate reports for issued books, overdue books, and fines collected.
+### FR27: Notifications
+The system shall notify users about booking confirmation, rejection, or cancellation.
 
-### FR28: Reports and Analytics
-The system shall provide user activity reports.
+### FR28: Notifications
+The system shall send reminders before the event date.
 
-### FR29: Reports and Analytics
+### FR29: Notifications
+The system shall notify administrators of new booking requests.
+
+### FR30: Reports and Analytics
+The system shall generate reports on bookings, revenue, and hall utilization.
+
+### FR31: Reports and Analytics
+The system shall generate daily, monthly, and yearly reports.
+
+### FR32: Reports and Analytics
 The system shall allow exporting reports in standard formats.
 
 ## Non-Functional Requirements
 
-- **NFR1**: The system shall support concurrent access by multiple users.
-- **NFR2**: Search results shall be displayed within acceptable response time.
-- **NFR3**: The system shall handle peak usage during academic hours.
+- **NFR1**: The system shall support multiple concurrent users.
+- **NFR2**: Availability checks shall be processed quickly.
+- **NFR3**: The system shall handle peak booking periods efficiently.
 - **NFR4**: The system shall enforce role-based access control.
-- **NFR5**: The system shall store passwords in encrypted form.
-- **NFR6**: The system shall prevent unauthorized access to sensitive data.
-- **NFR7**: The system shall maintain audit logs for critical operations.
-- **NFR8**: The system shall have an intuitive and user-friendly interface.
-- **NFR9**: The system shall be accessible via web browsers.
-- **NFR10**: The system shall require minimal training for librarians and users.
-- **NFR11**: The system shall ensure data consistency and integrity.
-- **NFR12**: The system shall recover gracefully from failures.
-- **NFR13**: The system shall provide regular data backups.
-- **NFR14**: The system shall support growth in number of users and books.
-- **NFR15**: The system shall allow future feature enhancements.
-- **NFR16**: The system shall follow modular architecture.
-- **NFR17**: The system shall be easy to update and debug.
-- **NFR18**: The system shall include proper documentation.
+- **NFR5**: The system shall encrypt sensitive user and payment data.
+- **NFR6**: The system shall maintain logs of booking and payment activities.
+- **NFR7**: The system shall provide a simple and intuitive user interface.
+- **NFR8**: The system shall be accessible through standard web browsers.
+- **NFR9**: The system shall require minimal training for users and staff.
+- **NFR10**: The system shall ensure accurate booking and payment records.
+- **NFR11**: The system shall provide data backup and recovery mechanisms.
+- **NFR12**: The system shall minimize downtime.
+- **NFR13**: The system shall support addition of new halls and users.
+- **NFR14**: The system shall allow future integration with external payment gateways.
+- **NFR15**: The system shall follow a modular and well-documented design.
+- **NFR16**: The system shall be easy to maintain and enhance.
+- **NFR17**: The system shall support configuration changes without major redevelopment.
 
 ## Acceptance Criteria
 
 ### AC1 (References: )
-- Users can successfully search, issue, and return books.
+- Users can view hall availability and request bookings successfully.
 
 ### AC2 (References: )
-- Librarians can manage inventory and fines accurately.
+- The system prevents booking conflicts.
 
 ### AC3 (References: )
-- Reports reflect real-time library data.
+- Administrators can manage halls, bookings, and payments accurately.
 
 ### AC4 (References: )
-- System enforces borrowing rules and security policies.
+- Reports reflect correct and up-to-date booking data.
