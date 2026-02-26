@@ -1,171 +1,177 @@
 1. Introduction
 
-The Library Management System (LMS) is a software application designed to automate and manage the day-to-day operations of a library. It provides facilities for managing books, users, borrowing/returning transactions, fines, and administrative control, ensuring efficiency, accuracy, and accessibility of library services.
+The Hall Management System (HMS) is a software application designed to manage and automate the booking, scheduling, and administration of halls such as seminar halls, auditoriums, conference rooms, and marriage halls. The system helps avoid booking conflicts, improves transparency, and simplifies coordination between users and administrators.
 
 2. Stakeholders
 
-Librarian / Library Administrator
+Hall Administrator
 
-Library Members (Students, Faculty, Public Users)
+Event Organizers / Users
 
-System Administrator
+Facility Management Staff
 
-Institution Management
+Institution / Organization Management
 
 3. User Roles
 
-Admin – Manages system configuration, users, and reports
+Admin – Manages halls, approvals, users, pricing, and reports
 
-Librarian – Manages books, issues/returns, fines
+Staff/Manager – Manages daily operations, maintenance, and schedules
 
-Member/User – Searches books, borrows, returns, views account
+User/Customer – Requests bookings, views availability, and makes payments
 
 4. Functional Requirements
 4.1 User Management
 
 The system shall allow administrators to create, update, and delete user accounts.
 
-The system shall support different user roles such as admin, librarian, and member.
+The system shall support different roles such as admin, staff, and user.
 
-The system shall allow users to log in using secure authentication.
+The system shall provide secure login and logout functionality.
 
-The system shall allow users to update personal profile details.
+The system shall allow users to update their profile information.
 
-The system shall deactivate inactive or expired user accounts.
+The system shall deactivate blocked or inactive user accounts.
 
-4.2 Book Management
+4.2 Hall Management
 
-The system shall allow librarians to add new books with details such as title, author, ISBN, category, publisher, and quantity.
+The system shall allow administrators to add new halls with details such as name, capacity, location, facilities, and pricing.
 
-The system shall allow updating and deleting book records.
+The system shall allow updating and deleting hall details.
 
-The system shall track available, issued, and reserved copies of books.
+The system shall maintain hall availability status in real time.
 
-The system shall categorize books for easy browsing.
+The system shall allow tagging halls with types (seminar, auditorium, banquet, etc.).
 
-The system shall support bulk book import (optional).
+4.3 Booking Management
 
-4.3 Search and Discovery
+The system shall allow users to request hall bookings for specific dates and time slots.
 
-The system shall allow users to search books by title, author, ISBN, or category.
+The system shall prevent double booking for the same hall and time period.
 
-The system shall display book availability status.
+The system shall allow administrators to approve, reject, or modify booking requests.
 
-The system shall allow filtering and sorting search results.
+The system shall store booking details including event name, organizer, date, time, and duration.
 
-4.4 Book Issue and Return
+4.4 Availability Checking
 
-The system shall allow librarians to issue books to registered users.
+The system shall display available halls based on selected date and time.
 
-The system shall enforce a maximum borrowing limit per user.
+The system shall allow users to filter halls by capacity, facilities, and price.
 
-The system shall record issue date, due date, and return date.
+The system shall update availability automatically after booking approval.
 
-The system shall allow book returns and update availability automatically.
+4.5 Payment Management
 
-The system shall prevent issuing reference-only books.
+The system shall calculate booking charges based on duration and hall pricing.
 
-4.5 Reservation Management
+The system shall allow recording of payment status (paid, pending, refunded).
 
-The system shall allow users to reserve books that are currently unavailable.
+The system shall support advance and full payment options.
 
-The system shall notify users when a reserved book becomes available.
+The system shall generate payment receipts.
 
-The system shall maintain a reservation queue.
+4.6 Cancellation and Refund Management
 
-4.6 Fine and Penalty Management
+The system shall allow users to cancel bookings within defined rules.
 
-The system shall calculate fines automatically for overdue books.
+The system shall calculate refund amounts based on cancellation policies.
 
-The system shall allow librarians to collect and record fine payments.
+The system shall update hall availability after cancellation.
 
-The system shall restrict further borrowing if fines exceed a threshold.
+4.7 Maintenance and Facilities Management
 
-4.7 Notifications
+The system shall allow staff to mark halls as unavailable due to maintenance.
 
-The system shall send notifications for due dates, overdue books, and reservations.
+The system shall allow tracking of maintenance schedules.
 
-The system shall notify users upon successful issue or return of books.
+The system shall prevent booking of halls under maintenance.
 
-4.8 Reports and Analytics
+4.8 Notifications
 
-The system shall generate reports for issued books, overdue books, and fines collected.
+The system shall notify users about booking confirmation, rejection, or cancellation.
 
-The system shall provide user activity reports.
+The system shall send reminders before the event date.
+
+The system shall notify administrators of new booking requests.
+
+4.9 Reports and Analytics
+
+The system shall generate reports on bookings, revenue, and hall utilization.
+
+The system shall generate daily, monthly, and yearly reports.
 
 The system shall allow exporting reports in standard formats.
 
 5. Non-Functional Requirements
 5.1 Performance
 
-The system shall support concurrent access by multiple users.
+The system shall support multiple concurrent users.
 
-Search results shall be displayed within acceptable response time.
+Availability checks shall be processed quickly.
 
-The system shall handle peak usage during academic hours.
+The system shall handle peak booking periods efficiently.
 
 5.2 Security
 
 The system shall enforce role-based access control.
 
-The system shall store passwords in encrypted form.
+The system shall encrypt sensitive user and payment data.
 
-The system shall prevent unauthorized access to sensitive data.
-
-The system shall maintain audit logs for critical operations.
+The system shall maintain logs of booking and payment activities.
 
 5.3 Usability
 
-The system shall have an intuitive and user-friendly interface.
+The system shall provide a simple and intuitive user interface.
 
-The system shall be accessible via web browsers.
+The system shall be accessible through standard web browsers.
 
-The system shall require minimal training for librarians and users.
+The system shall require minimal training for users and staff.
 
 5.4 Reliability
 
-The system shall ensure data consistency and integrity.
+The system shall ensure accurate booking and payment records.
 
-The system shall recover gracefully from failures.
+The system shall provide data backup and recovery mechanisms.
 
-The system shall provide regular data backups.
+The system shall minimize downtime.
 
 5.5 Scalability
 
-The system shall support growth in number of users and books.
+The system shall support addition of new halls and users.
 
-The system shall allow future feature enhancements.
+The system shall allow future integration with external payment gateways.
 
 5.6 Maintainability
 
-The system shall follow modular architecture.
+The system shall follow a modular and well-documented design.
 
-The system shall be easy to update and debug.
+The system shall be easy to maintain and enhance.
 
-The system shall include proper documentation.
+The system shall support configuration changes without major redevelopment.
 
 6. Constraints
 
-The system shall operate on standard web technologies.
+The system shall operate using standard web technologies.
 
-The system shall comply with institutional policies.
+The system shall comply with organizational policies and rules.
 
-The system shall run within available hardware and network infrastructure.
+The system shall work within existing infrastructure.
 
 7. Assumptions
 
-Users have basic computer literacy.
+Users have access to the internet and basic technical knowledge.
 
-Internet connectivity is available for system access.
+Administrators are responsible for approving bookings.
 
-Librarians are responsible for data correctness.
+Pricing and policies are defined by management.
 
 8. Acceptance Criteria
 
-Users can successfully search, issue, and return books.
+Users can view hall availability and request bookings successfully.
 
-Librarians can manage inventory and fines accurately.
+The system prevents booking conflicts.
 
-Reports reflect real-time library data.
+Administrators can manage halls, bookings, and payments accurately.
 
-System enforces borrowing rules and security policies.
+Reports reflect correct and up-to-date booking data.
