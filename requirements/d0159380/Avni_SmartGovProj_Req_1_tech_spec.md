@@ -2,326 +2,131 @@
 
 ## 1. System Overview
 
-**Project Name:** Smart Project Governance & Access Control System
+**Project Name:** Library Management System
 
-**Description:** A centralized governance system that consolidates people, project, allocation, timesheets, and access data into a single system for improved visibility, control, and compliance.
+**Description:** A comprehensive system for managing library operations including user management, book management, search and discovery, book issue and return, reservation management, and fine and penalty management.
 
 **Architecture Pattern:** Microservices
 
 ### Key Design Decisions
 
-- Use a microservices architecture to enable modular development and scalability.
-- Implement RBAC for secure access control.
-- Use a relational database for data storage.
+- Use microservices architecture for scalability and maintainability
+- Implement role-based access control for security
+- Use RESTful APIs for communication between services
 
 ## 2. Data Model
 
-### Entity: Employee
+### Entity: User
 
 | Field | Type | Description |
 |-------|------|-------------|
-| id | UUID | Unique identifier for the employee. |
-| name | String | Employee's full name. |
-| email | String | Employee's email address. |
-| role | String | Employee's role in the organization. |
-| department | String | Employee's department. |
-| manager_id | UUID | ID of the employee's manager. |
-| status | String | Employee's current status (active, inactive, etc.). |
+| id | UUID | Unique identifier for the user |
+| username | String | Username for the user |
+| password | String | Encrypted password for the user |
+| role | String | Role of the user (admin, librarian, member) |
+| email | String | Email address of the user |
+| status | String | Status of the user (active, inactive, expired) |
 
-**Relationships:** manager_id
+**Relationships:** books
 
-### Entity: Project
-
-| Field | Type | Description |
-|-------|------|-------------|
-| id | UUID | Unique identifier for the project. |
-| name | String | Project name. |
-| owner_id | UUID | ID of the project owner. |
-| start_date | Date | Project start date. |
-| end_date | Date | Project end date. |
-| status | String | Project status (active, completed, etc.). |
-
-**Relationships:** owner_id
-
-### Entity: Allocation
+### Entity: Book
 
 | Field | Type | Description |
 |-------|------|-------------|
-| id | UUID | Unique identifier for the allocation. |
-| employee_id | UUID | ID of the allocated employee. |
-| project_id | UUID | ID of the project the employee is allocated to. |
-| percentage | Integer | Percentage of the employee's time allocated to the project. |
+| id | UUID | Unique identifier for the book |
+| title | String | Title of the book |
+| author | String | Author of the book |
+| isbn | String | ISBN of the book |
+| category | String | Category of the book |
+| publisher | String | Publisher of the book |
+| quantity | Integer | Quantity of the book available |
+| status | String | Status of the book (available, issued, reserved) |
 
-**Relationships:** employee_id, project_id
-
-### Entity: Timesheet
-
-| Field | Type | Description |
-|-------|------|-------------|
-| id | UUID | Unique identifier for the timesheet entry. |
-| employee_id | UUID | ID of the employee who logged the timesheet entry. |
-| project_id | UUID | ID of the project the timesheet entry is for. |
-| date | Date | Date of the timesheet entry. |
-| hours | Float | Number of hours worked on the project. |
-| is_billable | Boolean | Indicates if the hours are billable. |
-
-**Relationships:** employee_id, project_id
-
-### Entity: AccessRequest
-
-| Field | Type | Description |
-|-------|------|-------------|
-| id | UUID | Unique identifier for the access request. |
-| employee_id | UUID | ID of the employee requesting access. |
-| project_id | UUID | ID of the project the access is for. |
-| status | String | Status of the access request (pending, approved, denied). |
-| request_date | Date | Date the access request was made. |
-
-**Relationships:** employee_id, project_id
+**Relationships:** issued_to, reserved_by
 
 ## 3. API Design
 
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/employees` | Retrieve a list of all employees. |
-| POST | `/employees` | Create a new employee. |
-| GET | `/employees/{id}` | Retrieve an employee by ID. |
-| PUT | `/employees/{id}` | Update an employee. |
-| DELETE | `/employees/{id}` | Delete an employee. |
-| GET | `/projects` | Retrieve a list of all projects. |
-| POST | `/projects` | Create a new project. |
-| GET | `/projects/{id}` | Retrieve a project by ID. |
-| PUT | `/projects/{id}` | Update a project. |
-| DELETE | `/projects/{id}` | Delete a project. |
-| GET | `/allocations` | Retrieve a list of all allocations. |
-| POST | `/allocations` | Create a new allocation. |
-| GET | `/allocations/{id}` | Retrieve an allocation by ID. |
-| PUT | `/allocations/{id}` | Update an allocation. |
-| DELETE | `/allocations/{id}` | Delete an allocation. |
-| GET | `/timesheets` | Retrieve a list of all timesheets. |
-| POST | `/timesheets` | Create a new timesheet entry. |
-| GET | `/timesheets/{id}` | Retrieve a timesheet entry by ID. |
-| PUT | `/timesheets/{id}` | Update a timesheet entry. |
-| DELETE | `/timesheets/{id}` | Delete a timesheet entry. |
-| GET | `/accessrequests` | Retrieve a list of all access requests. |
-| POST | `/accessrequests` | Create a new access request. |
-| GET | `/accessrequests/{id}` | Retrieve an access request by ID. |
-| PUT | `/accessrequests/{id}` | Update an access request. |
-| DELETE | `/accessrequests/{id}` | Delete an access request. |
+| POST | `/users` | Create a new user account |
+| PUT | `/users/{id}` | Update user profile details |
+| DELETE | `/users/{id}` | Delete a user account |
+| POST | `/books` | Add a new book |
+| PUT | `/books/{id}` | Update book record |
+| DELETE | `/books/{id}` | Delete book record |
+| GET | `/books/search` | Search books by title or author |
 
-### GET `/employees`
+### POST `/users`
 
-Retrieve a list of all employees.
+Create a new user account
 
-**Response Body:** List of Employee entities.
+**Request Body:** username, password, role, email
 
-### POST `/employees`
+**Response Body:** User ID, username, role, email
 
-Create a new employee.
+### PUT `/users/{id}`
 
-**Request Body:** Employee entity with required fields.
+Update user profile details
 
-**Response Body:** Created Employee entity.
+**Request Body:** username, email, status
 
-### GET `/employees/{id}`
+**Response Body:** User ID, username, role, email, status
 
-Retrieve an employee by ID.
+### DELETE `/users/{id}`
 
-**Response Body:** Employee entity.
+Delete a user account
 
-### PUT `/employees/{id}`
+**Response Body:** User ID, status
 
-Update an employee.
+### POST `/books`
 
-**Request Body:** Employee entity with updated fields.
+Add a new book
 
-**Response Body:** Updated Employee entity.
+**Request Body:** title, author, isbn, category, publisher, quantity
 
-### DELETE `/employees/{id}`
+**Response Body:** Book ID, title, author, isbn, category, publisher, quantity
 
-Delete an employee.
+### PUT `/books/{id}`
 
-**Response Body:** Confirmation message.
+Update book record
 
-### GET `/projects`
+**Request Body:** title, author, isbn, category, publisher, quantity
 
-Retrieve a list of all projects.
+**Response Body:** Book ID, title, author, isbn, category, publisher, quantity
 
-**Response Body:** List of Project entities.
+### DELETE `/books/{id}`
 
-### POST `/projects`
+Delete book record
 
-Create a new project.
+**Response Body:** Book ID, status
 
-**Request Body:** Project entity with required fields.
+### GET `/books/search`
 
-**Response Body:** Created Project entity.
+Search books by title or author
 
-### GET `/projects/{id}`
+**Request Body:** title, author
 
-Retrieve a project by ID.
-
-**Response Body:** Project entity.
-
-### PUT `/projects/{id}`
-
-Update a project.
-
-**Request Body:** Project entity with updated fields.
-
-**Response Body:** Updated Project entity.
-
-### DELETE `/projects/{id}`
-
-Delete a project.
-
-**Response Body:** Confirmation message.
-
-### GET `/allocations`
-
-Retrieve a list of all allocations.
-
-**Response Body:** List of Allocation entities.
-
-### POST `/allocations`
-
-Create a new allocation.
-
-**Request Body:** Allocation entity with required fields.
-
-**Response Body:** Created Allocation entity.
-
-### GET `/allocations/{id}`
-
-Retrieve an allocation by ID.
-
-**Response Body:** Allocation entity.
-
-### PUT `/allocations/{id}`
-
-Update an allocation.
-
-**Request Body:** Allocation entity with updated fields.
-
-**Response Body:** Updated Allocation entity.
-
-### DELETE `/allocations/{id}`
-
-Delete an allocation.
-
-**Response Body:** Confirmation message.
-
-### GET `/timesheets`
-
-Retrieve a list of all timesheets.
-
-**Response Body:** List of Timesheet entities.
-
-### POST `/timesheets`
-
-Create a new timesheet entry.
-
-**Request Body:** Timesheet entity with required fields.
-
-**Response Body:** Created Timesheet entity.
-
-### GET `/timesheets/{id}`
-
-Retrieve a timesheet entry by ID.
-
-**Response Body:** Timesheet entity.
-
-### PUT `/timesheets/{id}`
-
-Update a timesheet entry.
-
-**Request Body:** Timesheet entity with updated fields.
-
-**Response Body:** Updated Timesheet entity.
-
-### DELETE `/timesheets/{id}`
-
-Delete a timesheet entry.
-
-**Response Body:** Confirmation message.
-
-### GET `/accessrequests`
-
-Retrieve a list of all access requests.
-
-**Response Body:** List of AccessRequest entities.
-
-### POST `/accessrequests`
-
-Create a new access request.
-
-**Request Body:** AccessRequest entity with required fields.
-
-**Response Body:** Created AccessRequest entity.
-
-### GET `/accessrequests/{id}`
-
-Retrieve an access request by ID.
-
-**Response Body:** AccessRequest entity.
-
-### PUT `/accessrequests/{id}`
-
-Update an access request.
-
-**Request Body:** AccessRequest entity with updated fields.
-
-**Response Body:** Updated AccessRequest entity.
-
-### DELETE `/accessrequests/{id}`
-
-Delete an access request.
-
-**Response Body:** Confirmation message.
+**Response Body:** List of books with title, author, isbn, category, publisher, quantity, status
 
 ## 4. Component Breakdown
 
-### EmployeeService
+### UserManagementService
 
-**Responsibility:** Handles CRUD operations for employees, including validation and audit logging.
+**Responsibility:** Handles user creation, update, and deletion
 
-**Depends on:** Database
+**Depends on:** UserService
 
-### ProjectService
+### BookManagementService
 
-**Responsibility:** Handles CRUD operations for projects, including validation and audit logging.
+**Responsibility:** Handles book addition, update, and deletion
 
-**Depends on:** Database
+**Depends on:** BookService
 
-### AllocationService
+### SearchService
 
-**Responsibility:** Handles CRUD operations for allocations, including validation and audit logging.
+**Responsibility:** Handles book search and discovery
 
-**Depends on:** Database
-
-### TimesheetService
-
-**Responsibility:** Handles CRUD operations for timesheets, including validation and audit logging.
-
-**Depends on:** Database
-
-### AccessRequestService
-
-**Responsibility:** Handles CRUD operations for access requests, including validation and audit logging.
-
-**Depends on:** Database
-
-### AuthenticationService
-
-**Responsibility:** Manages user authentication and authorization, including JWT token generation and validation.
-
-**Depends on:** Database
-
-### DashboardService
-
-**Responsibility:** Provides real-time dashboards and reports for project and employee data.
-
-**Depends on:** EmployeeService, ProjectService, AllocationService, TimesheetService, AccessRequestService
+**Depends on:** BookService
 
 ## 5. Tech Stack
 
@@ -336,16 +141,10 @@ Delete an access request.
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Unavailability or mismatch of HROne mock data | Medium | Use sample schemas aligned with expected HROne structure. |
-| Jira timesheet data not available or incomplete | High | Use mocked Jira worklogs with realistic data patterns. |
-| Dependency between modules causing delays | Medium | Follow dependency-aware delivery and phased development. |
-| Scope creep during implementation | Medium | Provide a section after project creation to clearly inform about in-scope and out-of-scope deliverables and any extra cost attached to them. |
-| Performance issues with reports | Low | Use indexing, caching, and background processing. |
-| Security gaps in access control | High | Enforce RBAC, audit logs, and secure authentication. |
-| Limited/delayed access to MS Entra ID APIs | Medium | Fall-back to HR One based mapping. |
+| Data consistency issues | High | Implement distributed transactions and use a consistent database |
+| Scalability issues | High | Use load balancers and auto-scaling groups |
 
 ## 7. Open Questions
 
-- What all access can be granted and what amount of data is available?
-- How to include scope creep, reusable and non-reusable customization, flag extra efforts, calculation of estimated efforts?
-- Gamifying Timesheet Entry – create a leaderboard
+- What is the exact format for the bulk book import?
+- How should the system handle simultaneous updates to the same book record?
