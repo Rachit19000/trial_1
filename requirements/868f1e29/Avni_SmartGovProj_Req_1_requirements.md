@@ -1,53 +1,125 @@
-# Requirements: Smart Project Governance & Access Control System
+# Requirements: Library Management System
 
 ## Functional Requirements
 
-### FR1: Establish a centralized, auditable employee master that governs identity, hierarchy, and lifecycle across the organization
-Create a centralized employee master that governs identity, hierarchy, and lifecycle across the organization with full audit trail for all employee-related actions.
+### FR1: User Management
+The system shall allow administrators to create, update, and delete user accounts.
 
-### FR2: Enable structured project creation and controlled visibility to ensure clear ownership and governance throughout the project lifecycle
-Enable structured project creation with auto-generated unique Project ID (PID) and controlled visibility for sensitive fields, ensuring clear ownership and governance throughout the project lifecycle.
+### FR2: User Management
+The system shall support different user roles such as admin, librarian, and member.
 
-### FR3: Optimize workforce utilization by enforcing capacity limits and providing real-time visibility into employee workload
-Enforce capacity limits and provide real-time visibility into employee workload through percentage-based allocation per project and visual load indicators.
+### FR3: User Management
+The system shall allow users to log in using secure authentication.
 
-### FR4: Ensure secure, project-bound, and time-bound access through approval-driven workflows with full traceability
-Ensure secure, project-bound, and time-bound access through approval-driven workflows with full traceability.
+### FR4: User Management
+The system shall allow users to update personal profile details.
 
-### FR5: Capture accurate, compliant effort data through controlled time entry and approval processes
-Capture accurate, compliant effort data through controlled time entry and approval processes.
+### FR5: User Management
+The system shall deactivate inactive or expired user accounts.
 
-### FR6: Deliver real-time, role-based insights to support operational oversight and informed decision-making
-Deliver real-time, role-based insights to support operational oversight and informed decision-making.
+### FR6: Book Management
+The system shall allow librarians to add new books with details such as title, author, ISBN, category, publisher, and quantity.
+
+### FR7: Book Management
+The system shall allow updating and deleting book records.
+
+### FR8: Book Management
+The system shall track available, issued, and reserved copies of books.
+
+### FR9: Book Management
+The system shall categorize books for easy browsing.
+
+### FR10: Book Management
+The system shall support bulk book import (optional).
+
+### FR11: Search and Discovery
+The system shall allow users to search books by title, author, ISBN, or category.
+
+### FR12: Search and Discovery
+The system shall display book availability status.
+
+### FR13: Search and Discovery
+The system shall allow filtering and sorting search results.
+
+### FR14: Book Issue and Return
+The system shall allow librarians to issue books to registered users.
+
+### FR15: Book Issue and Return
+The system shall enforce a maximum borrowing limit per user.
+
+### FR16: Book Issue and Return
+The system shall record issue date, due date, and return date.
+
+### FR17: Book Issue and Return
+The system shall allow book returns and update availability automatically.
+
+### FR18: Book Issue and Return
+The system shall prevent issuing reference-only books.
+
+### FR19: Reservation Management
+The system shall allow users to reserve books that are currently unavailable.
+
+### FR20: Reservation Management
+The system shall notify users when a reserved book becomes available.
+
+### FR21: Reservation Management
+The system shall maintain a reservation queue.
+
+### FR22: Fine and Penalty Management
+The system shall calculate fines automatically for overdue books.
+
+### FR23: Fine and Penalty Management
+The system shall allow librarians to collect and record fine payments.
+
+### FR24: Fine and Penalty Management
+The system shall restrict further borrowing if fines exceed a threshold.
+
+### FR25: Notifications
+The system shall send notifications for due dates, overdue books, and reservations.
+
+### FR26: Notifications
+The system shall notify users upon successful issue or return of books.
+
+### FR27: Reports and Analytics
+The system shall generate reports for issued books, overdue books, and fines collected.
+
+### FR28: Reports and Analytics
+The system shall provide user activity reports.
+
+### FR29: Reports and Analytics
+The system shall allow exporting reports in standard formats.
 
 ## Non-Functional Requirements
 
-- **NFR1**: API response times to remain within acceptable limits for standard user actions
-- **NFR2**: Dashboard pages to load within reasonable time for expected data volumes
-- **NFR3**: Background jobs (allocation calculations, reports) to run without impacting user experience
+- **NFR1**: The system shall support concurrent access by multiple users.
+- **NFR2**: Search results shall be displayed within acceptable response time.
+- **NFR3**: The system shall handle peak usage during academic hours.
+- **NFR4**: The system shall enforce role-based access control.
+- **NFR5**: The system shall store passwords in encrypted form.
+- **NFR6**: The system shall prevent unauthorized access to sensitive data.
+- **NFR7**: The system shall maintain audit logs for critical operations.
+- **NFR8**: The system shall have an intuitive and user-friendly interface.
+- **NFR9**: The system shall be accessible via web browsers.
+- **NFR10**: The system shall require minimal training for librarians and users.
+- **NFR11**: The system shall ensure data consistency and integrity.
+- **NFR12**: The system shall recover gracefully from failures.
+- **NFR13**: The system shall provide regular data backups.
+- **NFR14**: The system shall support growth in number of users and books.
+- **NFR15**: The system shall allow future feature enhancements.
+- **NFR16**: The system shall follow modular architecture.
+- **NFR17**: The system shall be easy to update and debug.
+- **NFR18**: The system shall include proper documentation.
 
 ## Acceptance Criteria
 
 ### AC1 (References: )
-- Employee data can be successfully imported and viewed in a People Master screen
+- Users can successfully search, issue, and return books.
 
 ### AC2 (References: )
-- Project allocations are system-driven and fully auditable, eliminating manual or meeting-based assignment decisions
+- Librarians can manage inventory and fines accurately.
 
 ### AC3 (References: )
-- Employee overload and underutilization are prevented through enforced percentage-based allocation limits
+- Reports reflect real-time library data.
 
 ### AC4 (References: )
-- Clear ownership and accountability are ensured through immutable, approved timesheet records
-
-### AC5 (References: )
-- All system access is project-bound, time-bound, fully audited, and automatically revoked when no longer required
-
-### AC6 (References: )
-- Timesheet data (billable and non-billable) is visible at project and employee level
-
-### AC7 (References: )
-- Reports accurately reflect allocations, access permissions, and project hours
-
-### AC8 (References: )
-- The system is stable, usable, and demonstrable to stakeholders
+- System enforces borrowing rules and security policies.
