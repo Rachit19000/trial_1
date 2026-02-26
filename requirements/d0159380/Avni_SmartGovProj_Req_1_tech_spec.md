@@ -4,15 +4,15 @@
 
 **Project Name:** Library Management System
 
-**Description:** A comprehensive system for managing library operations including user management, book management, search and discovery, book issue and return, reservation management, and fine and penalty management.
+**Description:** A system to manage library operations including user management, book management, search and discovery, book issue and return, reservation management, fine and penalty management, and reports and analytics.
 
 **Architecture Pattern:** Microservices
 
 ### Key Design Decisions
 
-- Use microservices architecture for scalability and maintainability
+- Use microservices for scalability and maintainability
 - Implement role-based access control for security
-- Use RESTful APIs for communication between services
+- Ensure data consistency and integrity through transactions
 
 ## 2. Data Model
 
@@ -25,6 +25,7 @@
 | password | String | Encrypted password for the user |
 | role | String | Role of the user (admin, librarian, member) |
 | email | String | Email address of the user |
+| profile | JSON | User profile details |
 | status | String | Status of the user (active, inactive, expired) |
 
 **Relationships:** books
@@ -42,49 +43,49 @@
 | quantity | Integer | Quantity of the book available |
 | status | String | Status of the book (available, issued, reserved) |
 
-**Relationships:** issued_to, reserved_by
+**Relationships:** user
 
 ## 3. API Design
 
 | Method | Path | Description |
 |--------|------|-------------|
 | POST | `/users` | Create a new user account |
-| PUT | `/users/{id}` | Update user profile details |
-| DELETE | `/users/{id}` | Delete a user account |
-| POST | `/books` | Add a new book |
+| PUT | `/users/{id}` | Update user profile |
+| DELETE | `/users/{id}` | Deactivate user account |
+| POST | `/books` | Add new book |
 | PUT | `/books/{id}` | Update book record |
 | DELETE | `/books/{id}` | Delete book record |
-| GET | `/books/search` | Search books by title or author |
+| GET | `/books` | Search books by title, author, isbn, or category |
 
 ### POST `/users`
 
 Create a new user account
 
-**Request Body:** username, password, role, email
+**Request Body:** username, password, role, email, profile
 
-**Response Body:** User ID, username, role, email
+**Response Body:** id, username, role, email, profile
 
 ### PUT `/users/{id}`
 
-Update user profile details
+Update user profile
 
-**Request Body:** username, email, status
+**Request Body:** profile
 
-**Response Body:** User ID, username, role, email, status
+**Response Body:** id, username, role, email, profile
 
 ### DELETE `/users/{id}`
 
-Delete a user account
+Deactivate user account
 
-**Response Body:** User ID, status
+**Response Body:** id, status
 
 ### POST `/books`
 
-Add a new book
+Add new book
 
 **Request Body:** title, author, isbn, category, publisher, quantity
 
-**Response Body:** Book ID, title, author, isbn, category, publisher, quantity
+**Response Body:** id, title, author, isbn, category, publisher, quantity
 
 ### PUT `/books/{id}`
 
@@ -92,39 +93,39 @@ Update book record
 
 **Request Body:** title, author, isbn, category, publisher, quantity
 
-**Response Body:** Book ID, title, author, isbn, category, publisher, quantity
+**Response Body:** id, title, author, isbn, category, publisher, quantity
 
 ### DELETE `/books/{id}`
 
 Delete book record
 
-**Response Body:** Book ID, status
+**Response Body:** id
 
-### GET `/books/search`
+### GET `/books`
 
-Search books by title or author
+Search books by title, author, isbn, or category
 
-**Request Body:** title, author
+**Request Body:** title, author, isbn, category
 
-**Response Body:** List of books with title, author, isbn, category, publisher, quantity, status
+**Response Body:** id, title, author, isbn, category, publisher, quantity, status
 
 ## 4. Component Breakdown
 
 ### UserManagementService
 
-**Responsibility:** Handles user creation, update, and deletion
+**Responsibility:** Handle user creation, update, and deactivation
 
 **Depends on:** UserService
 
 ### BookManagementService
 
-**Responsibility:** Handles book addition, update, and deletion
+**Responsibility:** Handle book addition, update, and deletion
 
 **Depends on:** BookService
 
 ### SearchService
 
-**Responsibility:** Handles book search and discovery
+**Responsibility:** Handle book search and availability status
 
 **Depends on:** BookService
 
@@ -141,10 +142,10 @@ Search books by title or author
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Data consistency issues | High | Implement distributed transactions and use a consistent database |
-| Scalability issues | High | Use load balancers and auto-scaling groups |
+| Scalability issues during peak usage | High | Implement load balancing and auto-scaling on AWS |
+| Data breaches due to insecure data storage | High | Use secure encryption methods and regular security audits |
 
 ## 7. Open Questions
 
-- What is the exact format for the bulk book import?
-- How should the system handle simultaneous updates to the same book record?
+- What are the specific requirements for bulk book import?
+- What are the specific requirements for fine and penalty management?
