@@ -6,108 +6,108 @@
 ## Sprint Week 1: Sprint 1
 
 ### US1: Users shall be able to register using email and password.
-Implement user registration functionality allowing users to create an account with email and password.
+The system should allow users to create an account by providing an email and password.
 
 **Acceptance Criteria:**
-- Users can enter their email and password to register.
-- User registration form includes fields for email and password.
-- Registration process is secure and stores hashed passwords.
+- Users can enter their email and password during registration.
+- A confirmation email is sent to the user's email address.
+- User registration is successful and a unique user ID is generated.
 
 **Linked FRs:** FR-1
 
 ### US2: Users shall be able to log in and log out securely.
-Implement user login and logout functionality with secure authentication.
+The system should allow users to log in with their email and password and log out securely.
 
 **Acceptance Criteria:**
 - Users can log in using their email and password.
-- Users can log out securely.
-- Login and logout process is secure and uses secure tokens.
+- Users can log out of their session.
+- Session is terminated upon logout.
 
 **Linked FRs:** FR-2
 
-## Sprint Week 2: Sprint 2
-
 ### US3: System shall support password reset via email.
-Implement password reset functionality allowing users to request a password reset via email.
+The system should allow users to request a password reset via email.
 
 **Acceptance Criteria:**
-- Users can request a password reset via email.
-- Email contains a secure link to reset the password.
-- Password reset process is secure and uses secure tokens.
+- Users can request a password reset by providing their email address.
+- A password reset link is sent to the user's email address.
+- Users can reset their password using the link.
 
 **Linked FRs:** FR-3
 
+## Sprint Week 2: Sprint 2
+
 ### US4: System shall support OAuth login (Google, Facebook).
-Implement OAuth login functionality allowing users to log in using Google or Facebook accounts.
+The system should allow users to log in using OAuth providers like Google and Facebook.
 
 **Acceptance Criteria:**
-- Users can log in using Google or Facebook accounts.
-- OAuth login process is secure and uses secure tokens.
-- OAuth login integrates with Google and Facebook APIs.
+- Users can log in using Google or Facebook.
+- User authentication is handled by OAuth providers.
+- User is redirected to the system after successful authentication.
 
 **Linked FRs:** FR-4
 
 ### US5: System shall encrypt stored passwords.
-Implement password encryption to ensure stored passwords are secure.
+The system should encrypt stored passwords to ensure data security.
 
 **Acceptance Criteria:**
 - Passwords are stored in an encrypted format.
 - Encryption algorithm is secure and up-to-date.
-- Decryption is not possible without the correct key.
+- Decryption is not possible without the encryption key.
 
 **Linked FRs:** FR-5
 
-## Sprint Week 3: Sprint 3
-
 ### US6: Sellers shall be able to add new products.
-Implement product addition functionality allowing sellers to add new products.
+Sellers should be able to add new products to the catalog.
 
 **Acceptance Criteria:**
-- Sellers can add new products.
-- Product addition form includes fields for name, description, price, images, stock quantity, and category.
-- Product addition is secure and validated.
+- Sellers can add new products with details like name, description, price, images, stock quantity, and category.
+- Products are stored in the database.
+- Products are visible to users.
 
 **Linked FRs:** FR-6
 
+## Sprint Week 3: Sprint 3
+
 ### US7: Sellers shall be able to update product details.
-Implement product update functionality allowing sellers to modify existing products.
+Sellers should be able to update product details.
 
 **Acceptance Criteria:**
-- Sellers can update product details.
-- Product update form includes fields for name, description, price, images, stock quantity, and category.
-- Product update is secure and validated.
+- Sellers can update product details like name, description, price, images, stock quantity, and category.
+- Updates are reflected in the database.
+- Updates are visible to users.
 
 **Linked FRs:** FR-7
 
 ### US8: Sellers shall be able to delete products.
-Implement product deletion functionality allowing sellers to remove products.
+Sellers should be able to delete products from the catalog.
 
 **Acceptance Criteria:**
 - Sellers can delete products.
-- Product deletion is secure and validated.
-- Product deletion is irreversible.
+- Products are removed from the database.
+- Products are no longer visible to users.
 
 **Linked FRs:** FR-8
 
-## Sprint Week 4: Sprint 4
-
 ### US9: Products shall contain name, description, price, images, stock quantity, category.
-Implement product details functionality ensuring products have the required fields.
+Products should have the specified details.
 
 **Acceptance Criteria:**
 - Products have a name, description, price, images, stock quantity, and category.
-- Product details are displayed correctly.
-- Product details are validated before saving.
+- Details are stored in the database.
+- Details are visible to users.
 
 **Linked FRs:** FR-9
 
+## Sprint Week 4: Sprint 4
+
 ### US10: Admin shall approve seller products before publishing (optional).
-Implement product approval functionality allowing admins to approve or reject products.
+Admin should be able to approve or reject products listed by sellers.
 
 **Acceptance Criteria:**
-- Admins can approve or reject products.
-- Product approval process is secure and validated.
-- Approved products are published.
-- Rejected products are not published.
+- Admin can view products listed by sellers.
+- Admin can approve or reject products.
+- Approved products are visible to users.
+- Rejected products are not visible to users.
 
 **Linked FRs:** FR-10
