@@ -4,7 +4,7 @@
 
 **Project Name:** E-Commerce Platform
 
-**Description:** A web-based system enabling customers to browse, search, and purchase products online, while allowing administrators and sellers to manage products, inventory, orders, and users.
+**Description:** A web-based system enabling customers to browse, search, and purchase products online while allowing administrators and sellers to manage products, inventory, orders, and users.
 
 **Architecture Pattern:** Microservices
 
@@ -22,12 +22,11 @@
 |-------|------|-------------|
 | id | UUID | Unique identifier for the user |
 | email | String | Email address of the user |
-| password | String | Hashed password of the user |
+| password | String | Encrypted password of the user |
 | role | String | Role of the user (Guest, Registered, Seller, Admin) |
 | created_at | Timestamp | Timestamp when the user was created |
-| updated_at | Timestamp | Timestamp when the user was last updated |
 
-**Relationships:** seller, admin, orders
+**Relationships:** seller, admin, cart, orders
 
 ### Entity: Product
 
@@ -35,13 +34,13 @@
 |-------|------|-------------|
 | id | UUID | Unique identifier for the product |
 | name | String | Name of the product |
-| description | Text | Description of the product |
+| description | String | Description of the product |
 | price | Decimal | Price of the product |
-| images | JSON | JSON array of image URLs |
+| images | String[] | List of image URLs for the product |
 | stock_quantity | Integer | Stock quantity of the product |
 | category | String | Category of the product |
+| seller_id | UUID | Foreign key to the seller who listed the product |
 | created_at | Timestamp | Timestamp when the product was created |
-| updated_at | Timestamp | Timestamp when the product was last updated |
 
 **Relationships:** seller, orders
 
@@ -50,11 +49,10 @@
 | Field | Type | Description |
 |-------|------|-------------|
 | id | UUID | Unique identifier for the order |
-| user_id | UUID | Foreign key to the User entity |
+| user_id | UUID | Foreign key to the user who placed the order |
 | total_cost | Decimal | Total cost of the order |
 | status | String | Status of the order (Processing, Shipped, Delivered) |
 | created_at | Timestamp | Timestamp when the order was created |
-| updated_at | Timestamp | Timestamp when the order was last updated |
 
 **Relationships:** user, items
 
@@ -63,156 +61,226 @@
 | Field | Type | Description |
 |-------|------|-------------|
 | id | UUID | Unique identifier for the cart item |
-| product_id | UUID | Foreign key to the Product entity |
+| product_id | UUID | Foreign key to the product in the cart |
 | quantity | Integer | Quantity of the product in the cart |
+| user_id | UUID | Foreign key to the user who added the item to the cart |
 | created_at | Timestamp | Timestamp when the cart item was added |
-| updated_at | Timestamp | Timestamp when the cart item was last updated |
 
-**Relationships:** user, order
+**Relationships:** user, product
 
 ## 3. API Design
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/api/users/register` | Register a new user |
-| POST | `/api/users/login` | Log in a user |
-| POST | `/api/users/logout` | Log out a user |
-| POST | `/api/products` | Add a new product |
-| PUT | `/api/products/{id}` | Update a product |
-| DELETE | `/api/products/{id}` | Delete a product |
-| GET | `/api/products` | Get all products |
-| GET | `/api/products/{id}` | Get a product by ID |
-| POST | `/api/orders` | Create a new order |
-| GET | `/api/orders/{id}` | Get an order by ID |
-| GET | `/api/orders` | Get all orders |
+| POST | `/users/register` | Register a new user |
+| POST | `/users/login` | Log in a user |
+| POST | `/users/logout` | Log out a user |
+| POST | `/users/password-reset` | Request password reset |
+| POST | `/users/oauth/google` | Login using Google OAuth |
+| POST | `/users/oauth/facebook` | Login using Facebook OAuth |
+| POST | `/products` | Add a new product |
+| PUT | `/products/{id}` | Update a product |
+| DELETE | `/products/{id}` | Delete a product |
+| GET | `/products` | Get all products |
+| GET | `/products/{category}` | Get products by category |
+| GET | `/products/search/{keyword}` | Search products by keyword |
+| GET | `/products/{id}` | Get a product by ID |
+| POST | `/carts` | Add a product to cart |
+| PUT | `/carts/{id}` | Update cart item quantity |
+| DELETE | `/carts/{id}` | Remove a cart item |
+| GET | `/carts` | Get user's cart |
+| POST | `/orders` | Create an order |
+| GET | `/orders/{id}` | Get an order by ID |
+| GET | `/orders` | Get user's order history |
+| PUT | `/orders/{id}` | Update order status |
 
-### POST `/api/users/register`
+### POST `/users/register`
 
 Register a new user
 
-**Request Body:** email, password, role
+**Request Body:** email, password
 
-**Response Body:** id, email, role
+**Response Body:** user_id, role
 
-### POST `/api/users/login`
+### POST `/users/login`
 
 Log in a user
 
 **Request Body:** email, password
 
-**Response Body:** id, email, role, token
+**Response Body:** access_token, user_id, role
 
-### POST `/api/users/logout`
+### POST `/users/logout`
 
 Log out a user
 
-**Request Body:** token
+**Request Body:** access_token
 
 **Response Body:** status
 
-### POST `/api/products`
+### POST `/users/password-reset`
+
+Request password reset
+
+**Request Body:** email
+
+**Response Body:** status
+
+### POST `/users/oauth/google`
+
+Login using Google OAuth
+
+**Request Body:** code
+
+**Response Body:** access_token, user_id, role
+
+### POST `/users/oauth/facebook`
+
+Login using Facebook OAuth
+
+**Request Body:** code
+
+**Response Body:** access_token, user_id, role
+
+### POST `/products`
 
 Add a new product
 
-**Request Body:** name, description, price, images, stock_quantity, category
+**Request Body:** name, description, price, images, stock_quantity, category, seller_id
 
-**Response Body:** id, name, description, price, images, stock_quantity, category
+**Response Body:** product_id
 
-### PUT `/api/products/{id}`
+### PUT `/products/{id}`
 
 Update a product
 
 **Request Body:** name, description, price, images, stock_quantity, category
 
-**Response Body:** id, name, description, price, images, stock_quantity, category
+**Response Body:** status
 
-### DELETE `/api/products/{id}`
+### DELETE `/products/{id}`
 
 Delete a product
 
 **Response Body:** status
 
-### GET `/api/products`
+### GET `/products`
 
 Get all products
 
-**Response Body:** [id, name, description, price, images, stock_quantity, category]
+**Response Body:** products
 
-### GET `/api/products/{id}`
+### GET `/products/{category}`
+
+Get products by category
+
+**Response Body:** products
+
+### GET `/products/search/{keyword}`
+
+Search products by keyword
+
+**Response Body:** products
+
+### GET `/products/{id}`
 
 Get a product by ID
 
-**Response Body:** [id, name, description, price, images, stock_quantity, category]
+**Response Body:** product
 
-### POST `/api/orders`
+### POST `/carts`
 
-Create a new order
+Add a product to cart
 
-**Request Body:** user_id, items
+**Request Body:** product_id, quantity
 
-**Response Body:** id, user_id, total_cost, status
+**Response Body:** cart_item_id
 
-### GET `/api/orders/{id}`
+### PUT `/carts/{id}`
+
+Update cart item quantity
+
+**Request Body:** quantity
+
+**Response Body:** status
+
+### DELETE `/carts/{id}`
+
+Remove a cart item
+
+**Response Body:** status
+
+### GET `/carts`
+
+Get user's cart
+
+**Response Body:** cart_items
+
+### POST `/orders`
+
+Create an order
+
+**Request Body:** shipping_address, cart_items
+
+**Response Body:** order_id
+
+### GET `/orders/{id}`
 
 Get an order by ID
 
-**Response Body:** [id, user_id, total_cost, status]
+**Response Body:** order
 
-### GET `/api/orders`
+### GET `/orders`
 
-Get all orders
+Get user's order history
 
-**Response Body:** [id, user_id, total_cost, status]
+**Response Body:** orders
+
+### PUT `/orders/{id}`
+
+Update order status
+
+**Request Body:** status
+
+**Response Body:** status
 
 ## 4. Component Breakdown
 
 ### UserService
 
-**Responsibility:** Handles user registration, login, and logout
+**Responsibility:** Handles user registration, login, logout, and password reset
 
 **Depends on:** AuthService
 
 ### ProductService
 
-**Responsibility:** Handles product management and search
+**Responsibility:** Manages product listings, updates, and deletions
 
-**Depends on:** InventoryService
+**Depends on:** AuthService
+
+### CartService
+
+**Responsibility:** Manages user cart items and operations
+
+**Depends on:** AuthService
 
 ### OrderService
 
-**Responsibility:** Handles order creation and management
+**Responsibility:** Manages order creation, status updates, and history
 
-**Depends on:** PaymentService
-
-### PaymentService
-
-**Responsibility:** Handles payment processing
-
-**Depends on:** PaymentGateway
-
-### InventoryService
-
-**Responsibility:** Handles inventory management
-
-**Depends on:** ProductService
+**Depends on:** AuthService
 
 ### AuthService
 
 **Responsibility:** Handles authentication and authorization
 
-**Depends on:** UserService
-
-### PaymentGateway
-
-**Responsibility:** Handles payment gateway integration
-
-**Depends on:** OrderService
+**Depends on:** UserService, ProductService, CartService, OrderService
 
 ## 5. Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React |
+| Frontend | React.js |
 | Backend | Node.js with Express |
 | Database | PostgreSQL |
 | Infrastructure | AWS |
@@ -221,9 +289,9 @@ Get all orders
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Security vulnerabilities in payment processing | Financial loss and reputation damage | Use secure payment gateways and follow PCI-DSS standards |
-| High traffic during peak times | System downtime and poor user experience | Implement load balancing and auto-scaling |
-| Data breaches | Loss of customer trust and legal consequences | Implement strong encryption and regular security audits |
+| High traffic during peak hours | System performance degradation | Implement load balancing and auto-scaling |
+| Data breaches | Loss of user data and trust | Implement strong encryption, regular security audits, and secure coding practices |
+| Payment gateway integration issues | Failed transactions and customer dissatisfaction | Thoroughly test payment gateway integrations and monitor for issues |
 
 ## 7. Open Questions
 
