@@ -2,245 +2,195 @@
 
 ## 1. System Overview
 
-**Project Name:** Movie Hall Management System
+**Project Name:** E-Commerce Platform
 
-**Description:** A web-based application for managing movie theatre operations including movie scheduling, ticket booking, seat management, payment processing, and reporting.
+**Description:** A web-based system enabling customers to browse, search, and purchase products online while allowing administrators and sellers to manage products, inventory, orders, and users.
 
 **Architecture Pattern:** Microservices
 
 ### Key Design Decisions
 
-- Use microservices architecture for scalability and maintainability
-- Implement RESTful APIs for communication between services
-- Use a database to store application data
+- Scalability and high availability through microservices architecture
+- Separation of concerns for better maintainability
+- Use of cloud services for infrastructure
 
 ## 2. Data Model
+
+### Entity: Product
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Unique identifier for the product |
+| name | String | Name of the product |
+| description | Text | Detailed description of the product |
+| price | Decimal | Price of the product |
+| images | String[] | URLs of product images |
+| stock_quantity | Integer | Current stock quantity of the product |
+| category_id | UUID | Foreign key to the category entity |
+| seller_id | UUID | Foreign key to the seller entity |
+
+**Relationships:** category, seller
 
 ### Entity: User
 
 | Field | Type | Description |
 |-------|------|-------------|
 | id | UUID | Unique identifier for the user |
-| name | String | User's full name |
-| email | String | User's email address |
-| password | String | User's password (hashed) |
-| role | String | User's role (Admin or User) |
+| email | String | Email address of the user |
+| password | String | Hashed password of the user |
+| role | String | Role of the user (e.g., customer, seller, admin) |
+| name | String | Full name of the user |
+| address | String | Shipping address of the user |
 
-**Relationships:** Show, Booking
+**Relationships:** cart, orders
 
-### Entity: Movie
-
-| Field | Type | Description |
-|-------|------|-------------|
-| id | UUID | Unique identifier for the movie |
-| title | String | Movie title |
-| description | String | Movie description |
-| duration | Integer | Movie duration in minutes |
-| rating | Float | Movie rating |
-
-**Relationships:** Show
-
-### Entity: Show
+### Entity: Order
 
 | Field | Type | Description |
 |-------|------|-------------|
-| id | UUID | Unique identifier for the show |
-| movie_id | UUID | Foreign key to the Movie entity |
-| screen_id | UUID | Foreign key to the Screen entity |
-| start_time | Timestamp | Show start time |
-| end_time | Timestamp | Show end time |
+| id | UUID | Unique identifier for the order |
+| user_id | UUID | Foreign key to the user entity |
+| total_cost | Decimal | Total cost of the order |
+| status | String | Current status of the order (e.g., processing, shipped, delivered) |
+| order_date | Date | Date when the order was placed |
 
-**Relationships:** Movie, Screen, Booking
+**Relationships:** user, items
 
-### Entity: Screen
-
-| Field | Type | Description |
-|-------|------|-------------|
-| id | UUID | Unique identifier for the screen |
-| hall_id | UUID | Foreign key to the Hall entity |
-| name | String | Screen name |
-| layout | String | Seat layout in JSON format |
-
-**Relationships:** Show
-
-### Entity: Hall
+### Entity: CartItem
 
 | Field | Type | Description |
 |-------|------|-------------|
-| id | UUID | Unique identifier for the hall |
-| name | String | Hall name |
-| capacity | Integer | Hall capacity |
+| id | UUID | Unique identifier for the cart item |
+| product_id | UUID | Foreign key to the product entity |
+| quantity | Integer | Quantity of the product in the cart |
 
-**Relationships:** Screen
-
-### Entity: Booking
-
-| Field | Type | Description |
-|-------|------|-------------|
-| id | UUID | Unique identifier for the booking |
-| user_id | UUID | Foreign key to the User entity |
-| show_id | UUID | Foreign key to the Show entity |
-| seat_ids | String | Comma-separated list of seat IDs |
-| total_amount | Float | Total amount paid for the booking |
-| status | String | Booking status (Confirmed, Cancelled, etc.) |
-
-**Relationships:** User, Show
+**Relationships:** cart, product
 
 ## 3. API Design
 
 | Method | Path | Description |
 |--------|------|-------------|
 | POST | `/users/register` | Register a new user |
-| POST | `/users/login` | User login |
-| POST | `/users/logout` | User logout |
-| GET | `/movies` | List all movies |
-| GET | `/movies/{movie_id}` | Get movie details |
-| POST | `/shows` | Add a new show |
-| PUT | `/shows/{show_id}` | Update show details |
-| DELETE | `/shows/{show_id}` | Delete a show |
-| GET | `/shows/{show_id}/seats` | Get seat layout for a show |
-| POST | `/bookings` | Book seats for a show |
-| GET | `/bookings/{booking_id}` | Get booking details |
-| PUT | `/bookings/{booking_id}` | Update booking details |
-| DELETE | `/bookings/{booking_id}` | Cancel a booking |
-| GET | `/admin/reports` | Get admin reports |
+| POST | `/users/login` | Log in a user |
+| GET | `/products` | List all products |
+| GET | `/products/{id}` | Get a specific product |
+| POST | `/carts` | Add a product to the cart |
+| PUT | `/carts/{id}` | Update the quantity of a product in the cart |
+| DELETE | `/carts/{id}` | Remove a product from the cart |
+| POST | `/orders` | Place an order |
+| GET | `/orders/{id}` | Get a specific order |
+| PUT | `/orders/{id}` | Update an order |
 
 ### POST `/users/register`
 
 Register a new user
 
-**Request Body:** User registration details
+**Request Body:** email, password, name
 
-**Response Body:** User registration confirmation
+**Response Body:** user_id, token
 
 ### POST `/users/login`
 
-User login
+Log in a user
 
-**Request Body:** User login credentials
+**Request Body:** email, password
 
-**Response Body:** User login confirmation
+**Response Body:** user_id, token
 
-### POST `/users/logout`
+### GET `/products`
 
-User logout
+List all products
 
-**Request Body:** User logout request
+**Response Body:** products
 
-**Response Body:** User logout confirmation
+### GET `/products/{id}`
 
-### GET `/movies`
+Get a specific product
 
-List all movies
+**Response Body:** product
 
-**Response Body:** List of movies
+### POST `/carts`
 
-### GET `/movies/{movie_id}`
+Add a product to the cart
 
-Get movie details
+**Request Body:** product_id, quantity
 
-**Response Body:** Movie details
+**Response Body:** cart_item_id
 
-### POST `/shows`
+### PUT `/carts/{id}`
 
-Add a new show
+Update the quantity of a product in the cart
 
-**Request Body:** Show details
+**Request Body:** quantity
 
-**Response Body:** Show creation confirmation
+**Response Body:** cart_item_id
 
-### PUT `/shows/{show_id}`
+### DELETE `/carts/{id}`
 
-Update show details
+Remove a product from the cart
 
-**Request Body:** Updated show details
+**Response Body:** cart_item_id
 
-**Response Body:** Show update confirmation
+### POST `/orders`
 
-### DELETE `/shows/{show_id}`
+Place an order
 
-Delete a show
+**Request Body:** shipping_address, cart_items
 
-**Response Body:** Show deletion confirmation
+**Response Body:** order_id
 
-### GET `/shows/{show_id}/seats`
+### GET `/orders/{id}`
 
-Get seat layout for a show
+Get a specific order
 
-**Response Body:** Seat layout
+**Response Body:** order
 
-### POST `/bookings`
+### PUT `/orders/{id}`
 
-Book seats for a show
+Update an order
 
-**Request Body:** Seat booking details
+**Request Body:** status
 
-**Response Body:** Booking confirmation
-
-### GET `/bookings/{booking_id}`
-
-Get booking details
-
-**Response Body:** Booking details
-
-### PUT `/bookings/{booking_id}`
-
-Update booking details
-
-**Request Body:** Updated booking details
-
-**Response Body:** Booking update confirmation
-
-### DELETE `/bookings/{booking_id}`
-
-Cancel a booking
-
-**Response Body:** Booking cancellation confirmation
-
-### GET `/admin/reports`
-
-Get admin reports
-
-**Response Body:** Admin reports
+**Response Body:** order_id
 
 ## 4. Component Breakdown
 
-### UserService
+### UserManagementService
 
 **Responsibility:** Handles user registration, login, and logout
 
-**Depends on:** UserService
+**Depends on:** AuthenticationService
 
-### MovieService
+### ProductService
 
-**Responsibility:** Manages movie listings and details
+**Responsibility:** Manages product catalog and search
 
-**Depends on:** UserService
+**Depends on:** CategoryService, SellerService
 
-### ShowService
+### CartService
 
-**Responsibility:** Manages show scheduling and seat availability
+**Responsibility:** Manages user cart and checkout process
 
-**Depends on:** UserService, MovieService
+**Depends on:** UserService, ProductService
 
-### BookingService
+### OrderService
 
-**Responsibility:** Handles seat booking and payment processing
+**Responsibility:** Handles order placement and management
 
-**Depends on:** UserService, ShowService
+**Depends on:** UserService, ProductService
 
-### AdminService
+### PaymentService
 
-**Responsibility:** Manages admin operations and reports
+**Responsibility:** Integrates with payment gateway and processes payments
 
-**Depends on:** UserService, MovieService, ShowService, BookingService
+**Depends on:** OrderService
 
 ## 5. Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React.js |
-| Backend | Spring Boot |
+| Backend | Node.js with Express |
 | Database | PostgreSQL |
 | Infrastructure | AWS |
 
@@ -248,11 +198,11 @@ Get admin reports
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Security vulnerabilities in payment processing | Financial loss and reputation damage | Use a reputable payment gateway and perform regular security audits |
-| Database performance issues | Slow response times and user frustration | Optimize database queries and use indexing |
-| Concurrency issues | Data inconsistencies and user errors | Implement proper locking mechanisms and use transactions |
+| Scalability issues with high traffic | System performance degradation | Implement load balancing and auto-scaling |
+| Data breaches due to insecure storage | Data loss and customer trust erosion | Use secure encryption and access controls |
 
 ## 7. Open Questions
 
-- What is the exact payment gateway to be used?
-- How will user roles be managed and enforced?
+- What specific payment gateways will be integrated?
+- What level of inventory management is required?
+- How will user reviews and ratings be moderated?
