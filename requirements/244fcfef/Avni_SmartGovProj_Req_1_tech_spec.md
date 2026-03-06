@@ -4,15 +4,14 @@
 
 **Project Name:** E-Commerce Platform
 
-**Description:** A web-based system enabling customers to browse, search, and purchase products online while allowing administrators and sellers to manage products, inventory, orders, and users.
+**Description:** A web-based system enabling customers to browse, search, and purchase products online, while allowing administrators and sellers to manage products, inventory, orders, and users.
 
 **Architecture Pattern:** Microservices
 
 ### Key Design Decisions
 
-- Scalability and high availability
-- Separation of concerns
-- Modular design for easier maintenance
+- Scalability and high availability are prioritized.
+- Security and compliance with data privacy regulations are mandatory.
 
 ## 2. Data Model
 
@@ -24,9 +23,23 @@
 | email | String | Email address of the user |
 | password | String | Encrypted password of the user |
 | role | String | Role of the user (Guest, Registered, Seller, Admin) |
-| created_at | Timestamp | Timestamp when the user was created |
+| created_at | Timestamp | Timestamp of user creation |
+| updated_at | Timestamp | Timestamp of user last update |
 
-**Relationships:** seller, admin, orders
+**Relationships:** seller, admin, orders, cart
+
+### Entity: Seller
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Unique identifier for the seller |
+| user_id | UUID | Foreign key to the User entity |
+| business_name | String | Name of the business |
+| contact_info | String | Contact information of the seller |
+| created_at | Timestamp | Timestamp of seller creation |
+| updated_at | Timestamp | Timestamp of seller last update |
+
+**Relationships:** products
 
 ### Entity: Product
 
@@ -34,13 +47,13 @@
 |-------|------|-------------|
 | id | UUID | Unique identifier for the product |
 | name | String | Name of the product |
-| description | Text | Description of the product |
+| description | String | Description of the product |
 | price | Decimal | Price of the product |
-| images | String[] | List of image URLs for the product |
+| images | String[] | URLs of the product images |
 | stock_quantity | Integer | Stock quantity of the product |
 | category | String | Category of the product |
-| seller_id | UUID | Foreign key to the seller who listed the product |
-| created_at | Timestamp | Timestamp when the product was created |
+| created_at | Timestamp | Timestamp of product creation |
+| updated_at | Timestamp | Timestamp of product last update |
 
 **Relationships:** seller, orders
 
@@ -49,22 +62,25 @@
 | Field | Type | Description |
 |-------|------|-------------|
 | id | UUID | Unique identifier for the order |
-| user_id | UUID | Foreign key to the user who placed the order |
+| user_id | UUID | Foreign key to the User entity |
 | total_cost | Decimal | Total cost of the order |
+| shipping_address | String | Shipping address of the order |
 | status | String | Status of the order (Processing, Shipped, Delivered) |
-| created_at | Timestamp | Timestamp when the order was created |
+| created_at | Timestamp | Timestamp of order creation |
+| updated_at | Timestamp | Timestamp of order last update |
 
-**Relationships:** user, items
+**Relationships:** products, user
 
-### Entity: CartItem
+### Entity: Cart
 
 | Field | Type | Description |
 |-------|------|-------------|
-| id | UUID | Unique identifier for the cart item |
-| product_id | UUID | Foreign key to the product in the cart |
+| id | UUID | Unique identifier for the cart |
+| user_id | UUID | Foreign key to the User entity |
+| product_id | UUID | Foreign key to the Product entity |
 | quantity | Integer | Quantity of the product in the cart |
-| user_id | UUID | Foreign key to the user who added the item to the cart |
-| created_at | Timestamp | Timestamp when the cart item was added |
+| created_at | Timestamp | Timestamp of cart creation |
+| updated_at | Timestamp | Timestamp of cart last update |
 
 **Relationships:** user, product
 
@@ -72,116 +88,159 @@
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/api/register` | Register a new user |
-| POST | `/api/login` | Log in a user |
-| GET | `/api/products` | Get all products |
-| POST | `/api/products` | Add a new product |
-| PUT | `/api/products/{id}` | Update a product |
-| DELETE | `/api/products/{id}` | Delete a product |
-| POST | `/api/orders` | Place an order |
-| GET | `/api/orders/{id}` | Get an order |
-| PUT | `/api/orders/{id}` | Update an order |
-| DELETE | `/api/orders/{id}` | Cancel an order |
+| POST | `/users/register` | Register a new user |
+| POST | `/users/login` | Log in a user |
+| POST | `/users/logout` | Log out a user |
+| POST | `/users/password-reset` | Request password reset |
+| POST | `/sellers/register` | Register a new seller |
+| POST | `/products` | Add a new product |
+| PUT | `/products/{id}` | Update a product |
+| DELETE | `/products/{id}` | Delete a product |
+| GET | `/products` | Get all products |
+| GET | `/products/{id}` | Get a product by ID |
+| GET | `/orders` | Get all orders |
+| GET | `/orders/{id}` | Get an order by ID |
+| POST | `/carts` | Add a product to the cart |
+| PUT | `/carts/{id}` | Update a cart item |
+| DELETE | `/carts/{id}` | Remove a cart item |
 
-### POST `/api/register`
+### POST `/users/register`
 
 Register a new user
 
 **Request Body:** email: String, password: String
 
-**Response Body:** id: UUID, email: String, role: String
+**Response Body:** id: UUID, email: String, role: String, created_at: Timestamp
 
-### POST `/api/login`
+### POST `/users/login`
 
 Log in a user
 
 **Request Body:** email: String, password: String
 
-**Response Body:** token: String
+**Response Body:** id: UUID, email: String, role: String, token: String, created_at: Timestamp
 
-### GET `/api/products`
+### POST `/users/logout`
 
-Get all products
+Log out a user
 
-**Response Body:** [{id: UUID, name: String, description: Text, price: Decimal, images: String[], stock_quantity: Integer, category: String, seller_id: UUID, created_at: Timestamp}]
+**Response Body:** message: String
 
-### POST `/api/products`
+### POST `/users/password-reset`
+
+Request password reset
+
+**Request Body:** email: String
+
+**Response Body:** message: String
+
+### POST `/sellers/register`
+
+Register a new seller
+
+**Request Body:** user_id: UUID, business_name: String, contact_info: String
+
+**Response Body:** id: UUID, user_id: UUID, business_name: String, contact_info: String, created_at: Timestamp
+
+### POST `/products`
 
 Add a new product
 
-**Request Body:** name: String, description: Text, price: Decimal, images: String[], stock_quantity: Integer, category: String, seller_id: UUID
+**Request Body:** name: String, description: String, price: Decimal, images: String[], stock_quantity: Integer, category: String
 
-**Response Body:** id: UUID, name: String, description: Text, price: Decimal, images: String[], stock_quantity: Integer, category: String, seller_id: UUID, created_at: Timestamp
+**Response Body:** id: UUID, name: String, description: String, price: Decimal, images: String[], stock_quantity: Integer, category: String, created_at: Timestamp, updated_at: Timestamp
 
-### PUT `/api/products/{id}`
+### PUT `/products/{id}`
 
 Update a product
 
-**Request Body:** name: String, description: Text, price: Decimal, images: String[], stock_quantity: Integer, category: String
+**Request Body:** name: String, description: String, price: Decimal, images: String[], stock_quantity: Integer, category: String
 
-**Response Body:** id: UUID, name: String, description: Text, price: Decimal, images: String[], stock_quantity: Integer, category: String, seller_id: UUID, created_at: Timestamp
+**Response Body:** id: UUID, name: String, description: String, price: Decimal, images: String[], stock_quantity: Integer, category: String, created_at: Timestamp, updated_at: Timestamp
 
-### DELETE `/api/products/{id}`
+### DELETE `/products/{id}`
 
 Delete a product
 
-### POST `/api/orders`
+**Response Body:** message: String
 
-Place an order
+### GET `/products`
 
-**Request Body:** user_id: UUID, items: [CartItem]
+Get all products
 
-**Response Body:** id: UUID, user_id: UUID, total_cost: Decimal, status: String, created_at: Timestamp
+**Response Body:** [{id: UUID, name: String, description: String, price: Decimal, images: String[], stock_quantity: Integer, category: String, created_at: Timestamp, updated_at: Timestamp}]
 
-### GET `/api/orders/{id}`
+### GET `/products/{id}`
 
-Get an order
+Get a product by ID
 
-**Response Body:** {id: UUID, user_id: UUID, total_cost: Decimal, status: String, created_at: Timestamp}
+**Response Body:** {id: UUID, name: String, description: String, price: Decimal, images: String[], stock_quantity: Integer, category: String, created_at: Timestamp, updated_at: Timestamp}
 
-### PUT `/api/orders/{id}`
+### GET `/orders`
 
-Update an order
+Get all orders
 
-**Request Body:** status: String
+**Response Body:** [{id: UUID, user_id: UUID, total_cost: Decimal, shipping_address: String, status: String, created_at: Timestamp, updated_at: Timestamp}]
 
-**Response Body:** {id: UUID, user_id: UUID, total_cost: Decimal, status: String, created_at: Timestamp}
+### GET `/orders/{id}`
 
-### DELETE `/api/orders/{id}`
+Get an order by ID
 
-Cancel an order
+**Response Body:** {id: UUID, user_id: UUID, total_cost: Decimal, shipping_address: String, status: String, created_at: Timestamp, updated_at: Timestamp}
+
+### POST `/carts`
+
+Add a product to the cart
+
+**Request Body:** product_id: UUID, quantity: Integer
+
+**Response Body:** id: UUID, user_id: UUID, product_id: UUID, quantity: Integer, created_at: Timestamp, updated_at: Timestamp
+
+### PUT `/carts/{id}`
+
+Update a cart item
+
+**Request Body:** quantity: Integer
+
+**Response Body:** id: UUID, user_id: UUID, product_id: UUID, quantity: Integer, created_at: Timestamp, updated_at: Timestamp
+
+### DELETE `/carts/{id}`
+
+Remove a cart item
+
+**Response Body:** message: String
 
 ## 4. Component Breakdown
 
-### User Management Service
+### UserService
 
-**Responsibility:** Handles user registration, login, and profile management
+**Responsibility:** Handles user registration, login, logout, and password reset.
 
-**Depends on:** Database
+**Depends on:** UserService, AuthService
 
-### Product Management Service
+### SellerService
 
-**Responsibility:** Handles product listing, updating, and deletion
+**Responsibility:** Handles seller registration and product management.
 
-**Depends on:** Database
+**Depends on:** UserService, ProductService
 
-### Order Management Service
+### ProductService
 
-**Responsibility:** Handles order placement, tracking, and cancellation
+**Responsibility:** Handles product catalog management and search.
 
-**Depends on:** Database
+**Depends on:** UserService, OrderService
 
-### Payment Gateway Integration
+### OrderService
 
-**Responsibility:** Handles secure payment processing
+**Responsibility:** Handles order management and checkout.
 
-**Depends on:** Database
+**Depends on:** UserService, ProductService
 
-### Admin Dashboard
+### CartService
 
-**Responsibility:** Provides analytics and management tools for admins
+**Responsibility:** Handles cart management.
 
-**Depends on:** User Management Service, Product Management Service, Order Management Service
+**Depends on:** UserService, ProductService
 
 ## 5. Tech Stack
 
@@ -196,11 +255,11 @@ Cancel an order
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Data breaches | High | Implement robust encryption, regular security audits, and secure coding practices |
-| Scalability issues | High | Use load balancers, auto-scaling groups, and caching strategies |
-| Payment gateway integration failures | Medium | Thoroughly test payment gateway integrations and implement retries and fallbacks |
+| High traffic leading to performance issues | System becomes slow or unresponsive | Implement load balancing and caching strategies |
+| Data breaches due to insecure storage | Loss of customer trust and potential legal issues | Use strong encryption algorithms and secure storage practices |
+| Integration failures with third-party services | System functionality is compromised | Thoroughly test integrations and use reliable services |
 
 ## 7. Open Questions
 
-- What specific payment gateways will be integrated?
-- What level of user verification is required for different roles?
+- What are the specific payment gateways to be integrated?
+- What are the exact requirements for the admin dashboard?
