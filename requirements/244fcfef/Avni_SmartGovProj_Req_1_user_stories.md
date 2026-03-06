@@ -1,110 +1,128 @@
-# User Stories: E-Commerce Platform
+# User Stories: Movie Hall Management System
 
-**Total User Stories:** 9
-**Estimated Effort:** 16 days
+**Total User Stories:** 12
+**Estimated Effort:** 32 days
 
 ## Sprint Week 1: Sprint 1
 
-### US1: User Registration
-Users should be able to register using email and password.
+### US001: User can register with name, email, and password
+Users must create an account to book tickets.
 
 **Acceptance Criteria:**
-- Users can enter their email and password to register.
-- Registration process should be secure and validate input.
-- User registration should generate a unique user ID.
+- User can provide name, email, and password during registration.
+- User can receive a confirmation message after successful registration.
 
-**Linked FRs:** FR-1
+**Linked FRs:** 1.3.1
 
-### US2: User Login
-Users should be able to log in and log out securely.
-
-**Acceptance Criteria:**
-- Users can enter their email and password to log in.
-- System should validate user credentials and generate a session token.
-- Users can log out securely.
-
-**Linked FRs:** FR-2
-
-### US3: Password Reset via Email
-System should support password reset via email.
+### US002: User can login using credentials
+User can log in to the system using registered credentials.
 
 **Acceptance Criteria:**
-- Users can request a password reset via email.
-- System should send a password reset link to the user's email.
-- Users can reset their password using the link.
+- User can enter email and password to log in.
+- User can receive a confirmation message after successful login.
 
-**Linked FRs:** FR-3
+**Linked FRs:** 1.3.1
+
+### US003: User can logout
+User can log out of the system.
+
+**Acceptance Criteria:**
+- User can click on logout button to log out.
+- User can receive a confirmation message after successful logout.
+
+**Linked FRs:** 1.3.1
 
 ## Sprint Week 2: Sprint 2
 
-### US4: OAuth Login
-System should support OAuth login (Google, Facebook).
+### US004: View movie name, description, duration, and rating
+The system displays currently running and upcoming movies.
 
 **Acceptance Criteria:**
-- Users can log in using Google or Facebook credentials.
-- OAuth login should be secure and validate user credentials.
-- User session should be managed securely.
+- System displays movie name, description, duration, and rating.
+- System updates the movie list automatically.
 
-**Linked FRs:** FR-4
+**Linked FRs:** 1.3.2
 
-### US5: Product Management for Sellers
-Sellers should be able to add, update, and delete products.
+### US005: Admin can add movie shows
+Admin schedules movie shows.
 
 **Acceptance Criteria:**
-- Sellers can add new products with details.
-- Sellers can update product details.
-- Sellers can delete products.
-- Products should have name, description, price, images, stock quantity, and category.
+- Admin can add new movie shows.
+- Admin can set show timings.
 
-**Linked FRs:** FR-6, FR-7, FR-8, FR-9
+**Linked FRs:** 1.3.3
+
+### US006: Admin can set show timings
+Admin schedules movie shows.
+
+**Acceptance Criteria:**
+- Admin can set show timings.
+- Admin can assign screen/hall.
+
+**Linked FRs:** 1.3.3
 
 ## Sprint Week 3: Sprint 3
 
-### US6: Product Search & Browsing
-Users should be able to browse products by category, search by keywords, filter by price, rating, and availability, and sort by price, popularity, and rating.
+### US007: Display seat layout, show available and booked seats, allow seat selection
+Users can select available seats before booking.
 
 **Acceptance Criteria:**
-- Users can browse products by category.
-- Users can search products by keywords.
-- Users can filter products by price, rating, and availability.
-- Users can sort products by price, popularity, and rating.
+- System displays seat layout.
+- System shows available and booked seats.
+- User can select seats.
 
-**Linked FRs:** FR-11, FR-12, FR-13, FR-14
+**Linked FRs:** 1.3.4
 
-### US7: Shopping Cart Management
-Users should be able to add, update, and remove items from the cart, and the cart should persist for logged-in users.
+### US008: Select movie, select show time, select seats, confirm booking
+Users can book tickets for selected seats.
 
 **Acceptance Criteria:**
-- Users can add products to the cart.
-- Users can update the quantity of items in the cart.
-- Users can remove items from the cart.
-- Cart should persist for logged-in users.
+- User can select movie.
+- User can select show time.
+- User can select seats.
+- User can confirm booking.
 
-**Linked FRs:** FR-15, FR-16, FR-17, FR-18
+**Linked FRs:** 1.3.5
 
 ## Sprint Week 4: Sprint 4
 
-### US8: Checkout & Order Management
-Users should be able to enter shipping address, calculate total cost, confirm order before payment, and view order history. Admin should be able to update order status and track order status.
+### US009: Integrate payment gateway, process payments securely, generate payment confirmation
+Users must complete payment to confirm booking.
 
 **Acceptance Criteria:**
-- Users can enter shipping address.
-- System should calculate total cost (tax + shipping).
-- Users can confirm order before payment.
-- System should generate a unique order ID.
-- Users can view order history.
-- Admin can update order status (Processing, Shipped, Delivered).
-- Users can track order status.
+- System integrates with payment gateway.
+- System processes payments securely.
+- System generates payment confirmation.
 
-**Linked FRs:** FR-19, FR-20, FR-21, FR-22, FR-23, FR-28, FR-29
+**Linked FRs:** 1.3.6
 
-### US9: Payment Processing
-System should integrate with payment gateway and support credit/debit cards, UPI, net banking. System should confirm payment before order processing and handle failed transactions gracefully.
+### US010: View booking details, cancel ticket before show time, receive cancellation confirmation
+Users can view or cancel bookings.
 
 **Acceptance Criteria:**
-- System should integrate with payment gateway.
-- Support credit/debit cards, UPI, net banking.
-- System should confirm payment before order processing.
-- System should handle failed transactions gracefully.
+- User can view booking details.
+- User can cancel ticket before show time.
+- User receives cancellation confirmation.
 
-**Linked FRs:** FR-24, FR-25, FR-26, FR-27
+**Linked FRs:** 1.3.7
+
+### US011: Add or remove movies, manage shows, view booking records, manage users
+Admin manages system operations.
+
+**Acceptance Criteria:**
+- Admin can add or remove movies.
+- Admin can manage shows.
+- Admin can view booking records.
+- Admin can manage users.
+
+**Linked FRs:** 1.3.8
+
+### US012: Daily revenue reports, movie performance reports, booking statistics
+Admin can view system reports.
+
+**Acceptance Criteria:**
+- Admin can generate daily revenue reports.
+- Admin can generate movie performance reports.
+- Admin can generate booking statistics.
+
+**Linked FRs:** 1.3.9
