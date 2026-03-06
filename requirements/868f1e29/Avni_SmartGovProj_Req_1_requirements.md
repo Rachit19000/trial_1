@@ -1,112 +1,303 @@
-# Requirements: Library Management System
+Movie Hall Management System
+1. Introduction
+1.1 Purpose
 
-## Functional Requirements
+The purpose of the Movie Hall Management System (MHMS) is to automate and manage the operations of a movie theatre. The system will handle movie scheduling, ticket booking, seat management, payment processing, and reporting. It allows customers to book tickets online and enables administrators to manage movies, shows, and theatre operations efficiently.
 
-### FR1: User Management
-The system shall allow administrators to create, update, and delete user accounts.
+1.2 Scope
 
-### FR2: User Management
-The system shall support different user roles such as admin, librarian, and member.
+The Movie Hall Management System provides a platform for:
 
-### FR3: User Management
-The system shall allow users to log in using secure authentication.
+Displaying available movies and show timings
 
-### FR4: User Management
-The system shall allow users to update personal profile details.
+Booking and canceling movie tickets
 
-### FR5: User Management
-The system shall deactivate inactive or expired user accounts.
+Selecting seats
 
-### FR6: Book Management
-The system shall allow librarians to add new books with details such as title, author, ISBN, category, publisher, and quantity.
+Managing movie schedules
 
-### FR7: Book Management
-The system shall allow updating and deleting book records.
+Processing payments
 
-### FR8: Book Management
-The system shall track available, issued, and reserved copies of books.
+Generating reports for administrators
 
-### FR9: Book Management
-The system shall categorize books for easy browsing.
+The system will improve efficiency, reduce manual work, and enhance customer experience.
 
-### FR10: Book Management
-The system shall support bulk book import (optional).
+1.3 Definitions, Acronyms, and Abbreviations
+Term	Meaning
+MHMS	Movie Hall Management System
+Admin	Administrator managing the system
+User	Customer booking tickets
+Show	A scheduled movie screening
+Seat Availability	Status of seats for a particular show
+2. Overall Description
+2.1 Product Perspective
 
-### FR11: Search and Discovery
-The system shall allow users to search books by title, author, ISBN, or category.
+The Movie Hall Management System is a web-based application that interacts with a database to store and manage movie, show, and booking information.
 
-### FR12: Search and Discovery
-The system shall display book availability status.
+The system consists of:
 
-### FR13: Search and Discovery
-The system shall allow filtering and sorting search results.
+Customer Interface
 
-### FR14: Book Issue and Return
-The system shall allow librarians to issue books to registered users.
+Admin Panel
 
-### FR15: Book Issue and Return
-The system shall enforce a maximum borrowing limit per user.
+Database
 
-### FR16: Book Issue and Return
-The system shall record issue date, due date, and return date.
+Payment Gateway
 
-### FR17: Book Issue and Return
-The system shall allow book returns and update availability automatically.
+2.2 Product Functions
 
-### FR18: Book Issue and Return
-The system shall prevent issuing reference-only books.
+The system will perform the following functions:
 
-### FR19: Reservation Management
-The system shall allow users to reserve books that are currently unavailable.
+Display available movies and showtimes
 
-### FR20: Reservation Management
-The system shall notify users when a reserved book becomes available.
+Allow users to register and login
 
-### FR21: Reservation Management
-The system shall maintain a reservation queue.
+Enable seat selection and ticket booking
 
-### FR22: Fine and Penalty Management
-The system shall calculate fines automatically for overdue books.
+Process payments
 
-### FR23: Fine and Penalty Management
-The system shall allow librarians to collect and record fine payments.
+Allow administrators to manage movies and shows
 
-### FR24: Fine and Penalty Management
-The system shall restrict further borrowing if fines exceed a threshold.
+Generate reports on bookings and revenue
 
-### FR25: Notifications
-The system shall send notifications to users and librarians for important events such as book availability, overdue books, and fine payments.
+2.3 User Classes and Characteristics
+Customer
 
-## Non-Functional Requirements
+Can browse movies and showtimes
 
-### NFR1: Performance
-The system shall handle a minimum of 100 concurrent users without significant degradation in performance.
+Can book tickets and select seats
 
-### NFR2: Security
-The system shall implement secure authentication and authorization mechanisms to protect user data.
+Can view booking history
 
-### NFR3: Usability
-The system shall provide a user-friendly interface for both administrators and users.
+Administrator
 
-### NFR4: Maintainability
-The system shall be designed with maintainability in mind, including clear documentation and modular code structure.
+Manages movies and schedules
 
-### NFR5: Scalability
-The system shall be scalable to support an increasing number of users and books.
+Monitors bookings
 
-### NFR6: Reliability
-The system shall ensure data integrity and consistency through robust error handling and validation.
+Generates reports
 
-### NFR7: Logging
-The system shall log critical events and errors for troubleshooting and auditing purposes.
+2.4 Operating Environment
 
-### NFR8: JSON Output
-The system shall output structured JSON data for consumption by other systems, with additional fields such as `functional_requirements_count` and `nonfunctional_requirements_count`.
+The system will operate in the following environment:
 
-## Technical Changes
+Web Browser (Chrome, Firefox, Edge)
 
-- The code now captures and redirects `sys.stdout` to `sys.stderr` to prevent library logs from corrupting the JSON output.
-- The `format_requirements_markdown` function has been added to format the requirements artifact as readable markdown.
-- The `main` function now handles JSON decoding errors and provides appropriate error messages.
-- The `FlowController` is used to process the requirement text and generate the `RequirementsArtifact`.
-- The output includes additional fields such as `functional_requirements_count` and `nonfunctional_requirements_count`.
+Web Server
+
+Database Server
+
+Internet connection
+
+2.5 Design Constraints
+
+Must support multiple concurrent users
+
+Must ensure secure payment transactions
+
+Must maintain data integrity
+
+2.6 Assumptions and Dependencies
+
+Users have internet access
+
+Payment gateway service is available
+
+Theatre seats and schedules are predefined
+
+3. System Features
+3.1 User Registration and Login
+Description
+
+Users must create an account to book tickets.
+
+Functional Requirements
+
+User can register with name, email, and password
+
+User can login using credentials
+
+User can logout
+
+3.2 Movie Listing
+Description
+
+The system displays currently running and upcoming movies.
+
+Functional Requirements
+
+View movie name
+
+View movie description
+
+View movie duration
+
+View movie rating
+
+3.3 Show Scheduling
+Description
+
+Admin schedules movie shows.
+
+Functional Requirements
+
+Admin can add movie shows
+
+Admin can set show timings
+
+Admin can assign screen/hall
+
+Admin can update or delete shows
+
+3.4 Seat Selection
+Description
+
+Users can select available seats before booking.
+
+Functional Requirements
+
+Display seat layout
+
+Show available and booked seats
+
+Allow seat selection
+
+3.5 Ticket Booking
+Description
+
+Users can book tickets for selected seats.
+
+Functional Requirements
+
+Select movie
+
+Select show time
+
+Select seats
+
+Confirm booking
+
+3.6 Payment Processing
+Description
+
+Users must complete payment to confirm booking.
+
+Functional Requirements
+
+Integrate payment gateway
+
+Process payments securely
+
+Generate payment confirmation
+
+3.7 Booking Management
+Description
+
+Users can view or cancel bookings.
+
+Functional Requirements
+
+View booking details
+
+Cancel ticket before show time
+
+Receive cancellation confirmation
+
+3.8 Admin Management
+Description
+
+Admin manages system operations.
+
+Functional Requirements
+
+Add or remove movies
+
+Manage shows
+
+View booking records
+
+Manage users
+
+3.9 Reporting
+Description
+
+Admin can view system reports.
+
+Functional Requirements
+
+Daily revenue reports
+
+Movie performance reports
+
+Booking statistics
+
+4. External Interface Requirements
+4.1 User Interface
+
+The system will provide:
+
+Login and registration page
+
+Movie listing page
+
+Seat selection interface
+
+Payment page
+
+Admin dashboard
+
+4.2 Hardware Interface
+
+Server machine
+
+User devices (mobile, laptop, desktop)
+
+4.3 Software Interface
+
+Web browser
+
+Database management system
+
+Payment gateway API
+
+4.4 Communication Interface
+
+Internet-based communication using HTTP/HTTPS
+
+5. Non-Functional Requirements
+5.1 Performance Requirements
+
+System should handle multiple users simultaneously
+
+Page loading time should be less than 3 seconds
+
+5.2 Security Requirements
+
+User authentication required
+
+Secure payment processing
+
+Encrypted password storage
+
+5.3 Reliability Requirements
+
+System availability should be high
+
+Data should be backed up regularly
+
+5.4 Usability Requirements
+
+User-friendly interface
+
+Easy navigation
+
+Responsive design for mobile devices
+
+6. Future Enhancements
+
+Mobile application integration
+
+Online snack ordering
+
+Loyalty and membership programs
+
