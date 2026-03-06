@@ -1,92 +1,61 @@
 # User Stories: E-Commerce Platform
 
-**Total User Stories:** 8
+**Total User Stories:** 4
 **Estimated Effort:** 16 days
 
-## Sprint Week 1: Sprint 1
+## Sprint Week 1: User Authentication
 
-### US1: Users shall be able to register using email and password.
-Implement user registration functionality allowing users to sign up with an email and password.
-
-**Acceptance Criteria:**
-- Users can enter their email and password during registration.
-- A unique user ID is generated upon successful registration.
-- User data is stored securely with encrypted passwords.
-
-**Linked FRs:** FR-1
-
-### US2: Users shall be able to log in and log out securely.
-Implement secure login and logout functionality for users.
+### US1: User Registration & Authentication
+Implement user registration, login, and logout functionalities.
 
 **Acceptance Criteria:**
-- Users can log in using their email and password.
-- Users can log out securely, invalidating their session.
-- Session management is handled securely.
+- Users can register using email and password.
+- Users can log in and log out securely.
+- System supports password reset via email.
+- System supports OAuth login (Google, Facebook).
 
-**Linked FRs:** FR-2
+**Linked FRs:** FR-1, FR-2, FR-3, FR-4
 
-## Sprint Week 2: Sprint 2
+## Sprint Week 2: Product Management
 
-### US3: System shall support password reset via email.
-Implement password reset functionality allowing users to reset their password via email.
-
-**Acceptance Criteria:**
-- Users can request a password reset via email.
-- A password reset link is sent to the user's email.
-- Users can reset their password using the link.
-
-**Linked FRs:** FR-3
-
-### US4: System shall support OAuth login (Google, Facebook).
-Implement OAuth login functionality allowing users to log in using Google or Facebook.
+### US2: Product Management
+Implement product management functionalities for sellers.
 
 **Acceptance Criteria:**
-- Users can log in using their Google or Facebook accounts.
-- User data is securely stored upon successful OAuth login.
-- OAuth login is integrated with the system.
+- Sellers can add new products.
+- Sellers can update product details.
+- Sellers can delete products.
+- Products contain name, description, price, images, stock quantity, category.
 
-**Linked FRs:** FR-4
+**Linked FRs:** FR-6, FR-7, FR-8, FR-9
 
-## Sprint Week 3: Sprint 3
+## Sprint Week 3: Product Search & Browsing
 
-### US5: System shall encrypt stored passwords.
-Implement password encryption for all stored user passwords.
-
-**Acceptance Criteria:**
-- All stored passwords are encrypted using a secure hashing algorithm.
-- Password encryption is applied to all existing and new user accounts.
-- Password decryption is not possible without the user's password.
-
-**Linked FRs:** FR-5
-
-### US6: Sellers shall be able to add new products.
-Implement functionality for sellers to add new products to the platform.
+### US3: Product Search & Browsing
+Implement product search and browsing functionalities.
 
 **Acceptance Criteria:**
-- Sellers can add new products with details such as name, description, price, images, stock quantity, and category.
-- Products are stored in the database with all required fields.
-- Products are visible to users after approval.
+- Users can browse products by category.
+- Users can search products by keywords.
+- Users can filter by price, rating, availability.
+- Users can sort by price, popularity, rating.
 
-**Linked FRs:** FR-6
+**Linked FRs:** FR-11, FR-12, FR-13, FR-14
 
-## Sprint Week 4: Sprint 4
+## Sprint Week 4: Shopping Cart & Checkout
 
-### US7: Sellers shall be able to update product details.
-Implement functionality for sellers to update product details.
-
-**Acceptance Criteria:**
-- Sellers can update product details such as name, description, price, images, stock quantity, and category.
-- Product updates are reflected in the database.
-- Updated products are visible to users.
-
-**Linked FRs:** FR-7
-
-### US8: Sellers shall be able to delete products.
-Implement functionality for sellers to delete products from the platform.
+### US4: Shopping Cart & Checkout
+Implement shopping cart and checkout functionalities.
 
 **Acceptance Criteria:**
-- Sellers can delete products from the platform.
-- Deleted products are no longer visible to users.
-- Product deletion is logged for auditing purposes.
+- Users can add products to cart.
+- Users can update quantity in cart.
+- Users can remove items from cart.
+- Cart persists for logged-in users.
+- Users can enter shipping address.
+- System calculates total cost (tax + shipping).
+- Users can confirm order before payment.
+- System generates unique order ID.
+- Users can view order history.
 
-**Linked FRs:** FR-8
+**Linked FRs:** FR-15, FR-16, FR-17, FR-18, FR-19, FR-20, FR-21, FR-22, FR-23
