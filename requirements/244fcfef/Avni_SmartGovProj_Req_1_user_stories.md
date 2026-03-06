@@ -1,92 +1,129 @@
-# User Stories: Library Management System
+# User Stories: Movie Hall Management System
 
-**Total User Stories:** 8
-**Estimated Effort:** 32 days
+**Total User Stories:** 13
+**Estimated Effort:** 28 days
 
-## Sprint Week 1: User Management
+## Sprint Week 1: User Authentication
 
-### US1: Create User Account
-As an administrator, I want to create a new user account with the necessary details.
-
-**Acceptance Criteria:**
-- The system creates a new user account with the provided details.
-- The system assigns a unique user ID.
-- The system sets the initial role to member.
-
-**Linked FRs:** FR1
-
-### US2: Update User Profile
-As a user, I want to update my profile details.
+### US001: User can register with name, email, and password
+Users must create an account to book tickets.
 
 **Acceptance Criteria:**
-- The system allows the user to update their profile details.
-- The system saves the updated profile details.
-- The system sends a notification to the user confirming the update.
+- User can provide name, email, and password during registration.
+- User can receive a confirmation message after successful registration.
 
-**Linked FRs:** FR4
+**Linked FRs:** 1.3.1
 
-## Sprint Week 2: Book Management
-
-### US3: Deactivate Inactive Users
-As an administrator, I want to deactivate user accounts that are inactive or expired.
+### US002: User can login using credentials
+User can log in to the system using their registered credentials.
 
 **Acceptance Criteria:**
-- The system identifies inactive or expired user accounts.
-- The system deactivates the identified user accounts.
-- The system sends a notification to the user about account deactivation.
+- User can enter their email and password to log in.
+- User can receive a confirmation message after successful login.
 
-**Linked FRs:** FR5
+**Linked FRs:** 1.3.1
 
-### US4: Add New Book
-As a librarian, I want to add a new book to the library collection.
-
-**Acceptance Criteria:**
-- The system allows the librarian to add a new book with the necessary details.
-- The system saves the new book details.
-- The system updates the book count.
-
-**Linked FRs:** FR6
-
-## Sprint Week 3: Book Issue and Return
-
-### US5: Update Book Record
-As a librarian, I want to update an existing book record.
+### US003: User can logout
+User can log out of the system.
 
 **Acceptance Criteria:**
-- The system allows the librarian to update an existing book record.
-- The system saves the updated book details.
-- The system updates the book count if necessary.
+- User can click on logout button to log out.
+- User can receive a confirmation message after successful logout.
 
-**Linked FRs:** FR7
+**Linked FRs:** 1.3.1
 
-### US6: Issue Book to User
-As a librarian, I want to issue a book to a registered user.
+## Sprint Week 2: Movie and Show Management
 
-**Acceptance Criteria:**
-- The system allows the librarian to issue a book to a user.
-- The system records the issue date, due date, and return date.
-- The system updates the book availability.
-
-**Linked FRs:** FR14
-
-## Sprint Week 4: Reservation Management
-
-### US7: Return Book
-As a librarian, I want to return a book and update its availability.
+### US004: View movie name, description, duration, and rating
+The system displays currently running and upcoming movies.
 
 **Acceptance Criteria:**
-- The system allows the librarian to return a book.
-- The system updates the book availability.
-- The system records the return date.
+- User can view the movie name, description, duration, and rating.
+- Information is displayed in a clear and readable format.
 
-**Linked FRs:** FR17
+**Linked FRs:** 1.3.2
 
-### US8: Notify User for Book Availability
-As a user, I want to be notified when a reserved book becomes available.
+### US005: Admin can add movie shows
+Admin schedules movie shows.
 
 **Acceptance Criteria:**
-- The system maintains a reservation queue.
-- The system notifies the user when a reserved book becomes available.
-- The system updates the reservation status.
+- Admin can add a new movie show.
+- Admin can set the show timings.
 
-**Linked FRs:** FR20
+**Linked FRs:** 1.3.3
+
+### US006: Admin can set show timings
+Admin schedules movie shows.
+
+**Acceptance Criteria:**
+- Admin can set the show timings.
+- Timings are displayed in a clear and readable format.
+
+**Linked FRs:** 1.3.3
+
+## Sprint Week 3: Seat Selection and Booking
+
+### US007: Display seat layout and show available and booked seats
+Users can select available seats before booking.
+
+**Acceptance Criteria:**
+- Users can view the seat layout.
+- Users can see which seats are available and which are booked.
+
+**Linked FRs:** 1.3.4
+
+### US008: Select movie and show time
+Users can book tickets for selected seats.
+
+**Acceptance Criteria:**
+- Users can select a movie and show time.
+- Selected movie and show time are displayed.
+
+**Linked FRs:** 1.3.5
+
+### US009: Confirm booking
+Users can book tickets for selected seats.
+
+**Acceptance Criteria:**
+- Users can confirm their booking.
+- Confirmation message is displayed.
+
+**Linked FRs:** 1.3.5
+
+## Sprint Week 4: Admin Management and Reporting
+
+### US010: Integrate payment gateway and process payments securely
+Users must complete payment to confirm booking.
+
+**Acceptance Criteria:**
+- Users can integrate with the payment gateway.
+- Payments are processed securely.
+
+**Linked FRs:** 1.3.6
+
+### US011: Generate payment confirmation
+Users must complete payment to confirm booking.
+
+**Acceptance Criteria:**
+- Users receive a payment confirmation after successful payment.
+- Confirmation message is displayed.
+
+**Linked FRs:** 1.3.6
+
+### US012: Admin can manage movies and shows
+Admin manages system operations.
+
+**Acceptance Criteria:**
+- Admin can add or remove movies.
+- Admin can manage shows.
+
+**Linked FRs:** 1.3.7
+
+### US013: Admin can view booking records
+Admin manages system operations.
+
+**Acceptance Criteria:**
+- Admin can view booking records.
+- Records are displayed in a clear and readable format.
+
+**Linked FRs:** 1.3.7
