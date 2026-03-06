@@ -12,7 +12,7 @@
 
 - Use microservices architecture for scalability and maintainability
 - Implement OAuth for secure authentication
-- Utilize cloud services for high availability and scalability
+- Use a distributed database for high availability
 
 ## 2. Data Model
 
@@ -23,10 +23,11 @@
 | id | UUID | Unique identifier for the user |
 | email | String | Email address of the user |
 | password | String | Hashed password of the user |
-| role | String | Role of the user (Guest, Registered, Seller, Admin) |
+| role | String | Role of the user (e.g., Customer, Seller, Admin) |
 | created_at | Timestamp | Timestamp when the user was created |
+| updated_at | Timestamp | Timestamp when the user was last updated |
 
-**Relationships:** seller, admin, cart, orders
+**Relationships:** seller, admin, cart, order
 
 ### Entity: Product
 
@@ -36,13 +37,14 @@
 | name | String | Name of the product |
 | description | Text | Description of the product |
 | price | Decimal | Price of the product |
-| images | Array<String> | Array of image URLs for the product |
-| stock_quantity | Integer | Stock quantity of the product |
+| images | JSON | List of images for the product |
+| stock_quantity | Integer | Quantity of the product in stock |
 | category | String | Category of the product |
 | seller_id | UUID | Foreign key to the seller who listed the product |
 | created_at | Timestamp | Timestamp when the product was created |
+| updated_at | Timestamp | Timestamp when the product was last updated |
 
-**Relationships:** seller, orders
+**Relationships:** seller, order_items
 
 ### Entity: Order
 
@@ -50,11 +52,36 @@
 |-------|------|-------------|
 | id | UUID | Unique identifier for the order |
 | user_id | UUID | Foreign key to the user who placed the order |
-| total_cost | Decimal | Total cost of the order (including tax and shipping) |
-| status | String | Status of the order (Processing, Shipped, Delivered) |
+| total_cost | Decimal | Total cost of the order |
+| status | String | Status of the order (e.g., Processing, Shipped, Delivered) |
 | created_at | Timestamp | Timestamp when the order was created |
+| updated_at | Timestamp | Timestamp when the order was last updated |
 
-**Relationships:** user, items
+**Relationships:** user, order_items
+
+### Entity: OrderItem
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Unique identifier for the order item |
+| product_id | UUID | Foreign key to the product in the order |
+| quantity | Integer | Quantity of the product in the order |
+| order_id | UUID | Foreign key to the order |
+| created_at | Timestamp | Timestamp when the order item was created |
+| updated_at | Timestamp | Timestamp when the order item was last updated |
+
+**Relationships:** product, order
+
+### Entity: Cart
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Unique identifier for the cart |
+| user_id | UUID | Foreign key to the user who owns the cart |
+| created_at | Timestamp | Timestamp when the cart was created |
+| updated_at | Timestamp | Timestamp when the cart was last updated |
+
+**Relationships:** user, cart_items
 
 ### Entity: CartItem
 
@@ -63,10 +90,11 @@
 | id | UUID | Unique identifier for the cart item |
 | product_id | UUID | Foreign key to the product in the cart |
 | quantity | Integer | Quantity of the product in the cart |
-| user_id | UUID | Foreign key to the user who added the item to the cart |
-| created_at | Timestamp | Timestamp when the cart item was added |
+| cart_id | UUID | Foreign key to the cart |
+| created_at | Timestamp | Timestamp when the cart item was created |
+| updated_at | Timestamp | Timestamp when the cart item was last updated |
 
-**Relationships:** user, product
+**Relationships:** product, cart
 
 ## 3. API Design
 
@@ -74,24 +102,18 @@
 |--------|------|-------------|
 | POST | `/users/register` | Register a new user |
 | POST | `/users/login` | Log in a user |
-| POST | `/users/logout` | Log out a user |
-| POST | `/users/password-reset` | Request password reset via email |
+| GET | `/products` | Get all products |
+| GET | `/products/{id}` | Get a product by ID |
 | POST | `/products` | Add a new product |
 | PUT | `/products/{id}` | Update a product |
 | DELETE | `/products/{id}` | Delete a product |
-| GET | `/products` | Get all products |
-| GET | `/products/{id}` | Get a product by ID |
-| GET | `/products/search` | Search products by keyword |
-| GET | `/products/{category}` | Get products by category |
 | POST | `/carts` | Add a product to the cart |
 | PUT | `/carts/{id}` | Update the quantity of a product in the cart |
 | DELETE | `/carts/{id}` | Remove a product from the cart |
-| GET | `/carts` | Get the current cart |
-| POST | `/orders` | Create an order |
+| POST | `/orders` | Place an order |
 | GET | `/orders/{id}` | Get an order by ID |
-| GET | `/orders` | Get all orders |
-| PUT | `/orders/{id}` | Update an order status |
-| GET | `/orders/user/{user_id}` | Get orders for a user |
+| PUT | `/orders/{id}` | Update an order |
+| DELETE | `/orders/{id}` | Cancel an order |
 
 ### POST `/users/register`
 
@@ -99,7 +121,7 @@ Register a new user
 
 **Request Body:** email, password
 
-**Response Body:** user_id, role
+**Response Body:** user_id, email, role
 
 ### POST `/users/login`
 
@@ -107,23 +129,19 @@ Log in a user
 
 **Request Body:** email, password
 
-**Response Body:** session_token
+**Response Body:** access_token, user_id, role
 
-### POST `/users/logout`
+### GET `/products`
 
-Log out a user
+Get all products
 
-**Request Body:** session_token
+**Response Body:** [{id, name, description, price, images, stock_quantity, category, seller_id, created_at, updated_at}]
 
-**Response Body:** status
+### GET `/products/{id}`
 
-### POST `/users/password-reset`
+Get a product by ID
 
-Request password reset via email
-
-**Request Body:** email
-
-**Response Body:** status
+**Response Body:** {id, name, description, price, images, stock_quantity, category, seller_id, created_at, updated_at}
 
 ### POST `/products`
 
@@ -131,7 +149,7 @@ Add a new product
 
 **Request Body:** name, description, price, images, stock_quantity, category, seller_id
 
-**Response Body:** product_id
+**Response Body:** {id, name, description, price, images, stock_quantity, category, seller_id, created_at, updated_at}
 
 ### PUT `/products/{id}`
 
@@ -139,39 +157,11 @@ Update a product
 
 **Request Body:** name, description, price, images, stock_quantity, category, seller_id
 
-**Response Body:** product_id
+**Response Body:** {id, name, description, price, images, stock_quantity, category, seller_id, created_at, updated_at}
 
 ### DELETE `/products/{id}`
 
 Delete a product
-
-**Response Body:** status
-
-### GET `/products`
-
-Get all products
-
-**Response Body:** products
-
-### GET `/products/{id}`
-
-Get a product by ID
-
-**Response Body:** product
-
-### GET `/products/search`
-
-Search products by keyword
-
-**Request Body:** keyword
-
-**Response Body:** products
-
-### GET `/products/{category}`
-
-Get products by category
-
-**Response Body:** products
 
 ### POST `/carts`
 
@@ -179,7 +169,7 @@ Add a product to the cart
 
 **Request Body:** product_id, quantity
 
-**Response Body:** cart_item_id
+**Response Body:** {id, user_id, created_at, updated_at}
 
 ### PUT `/carts/{id}`
 
@@ -187,97 +177,81 @@ Update the quantity of a product in the cart
 
 **Request Body:** quantity
 
-**Response Body:** cart_item_id
+**Response Body:** {id, user_id, created_at, updated_at}
 
 ### DELETE `/carts/{id}`
 
 Remove a product from the cart
 
-**Response Body:** status
-
-### GET `/carts`
-
-Get the current cart
-
-**Response Body:** cart_items
-
 ### POST `/orders`
 
-Create an order
+Place an order
 
-**Request Body:** shipping_address, cart_items
+**Request Body:** shipping_address, order_items
 
-**Response Body:** order_id
+**Response Body:** {id, user_id, total_cost, status, created_at, updated_at}
 
 ### GET `/orders/{id}`
 
 Get an order by ID
 
-**Response Body:** order
-
-### GET `/orders`
-
-Get all orders
-
-**Response Body:** orders
+**Response Body:** {id, user_id, total_cost, status, created_at, updated_at}
 
 ### PUT `/orders/{id}`
 
-Update an order status
+Update an order
 
 **Request Body:** status
 
-**Response Body:** order_id
+**Response Body:** {id, user_id, total_cost, status, created_at, updated_at}
 
-### GET `/orders/user/{user_id}`
+### DELETE `/orders/{id}`
 
-Get orders for a user
-
-**Response Body:** orders
+Cancel an order
 
 ## 4. Component Breakdown
 
-### UserService
+### User Management Service
 
-**Responsibility:** Handles user registration, login, logout, and password reset
+**Responsibility:** Handles user registration, authentication, and profile management
 
-**Depends on:** UserService
+**Depends on:** Authentication Service, User Database
 
-### ProductService
+### Product Management Service
 
-**Responsibility:** Handles product management, search, and browsing
+**Responsibility:** Handles product listing, updating, and deletion
 
-**Depends on:** UserService, ProductService
+**Depends on:** Product Database, Seller Service
 
-### CartService
+### Cart Management Service
 
-**Responsibility:** Handles cart management and checkout
+**Responsibility:** Handles cart operations such as adding, updating, and removing items
 
-**Depends on:** UserService, ProductService, CartService
+**Depends on:** User Database, Product Database
 
-### OrderService
+### Order Management Service
 
-**Responsibility:** Handles order creation, management, and tracking
+**Responsibility:** Handles order placement, updating, and cancellation
 
-**Depends on:** UserService, ProductService, CartService, OrderService
+**Depends on:** User Database, Product Database, Payment Gateway Service
 
-### PaymentService
+### Payment Gateway Service
 
-**Responsibility:** Handles payment processing and integration with payment gateway
+**Responsibility:** Handles secure payment processing
 
-**Depends on:** OrderService, PaymentService
+**Depends on:** Payment Gateway API
 
-### AdminService
+### Admin Dashboard Service
 
-**Responsibility:** Handles admin dashboard and system management
+**Responsibility:** Provides analytics and management features for admins
 
-**Depends on:** UserService, ProductService, CartService, OrderService, AdminService
+**Depends on:** User Database, Product Database, Order Database
 
 ## 5. Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React |
+| Frontend | React.js |
 | Backend | Node.js with Express |
 | Database | PostgreSQL |
 | Infrastructure | AWS |
@@ -286,11 +260,12 @@ Get orders for a user
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| High traffic during peak hours | System performance degradation | Implement load balancing and auto-scaling |
-| Data breaches | Loss of customer trust and data | Implement strong encryption and regular security audits |
-| Payment gateway integration issues | Failed transactions and customer dissatisfaction | Thorough testing and integration with multiple payment gateways |
+| Scalability issues with high traffic | System performance degradation | Implement load balancing and auto-scaling |
+| Data breaches due to insecure storage | Data loss and reputation damage | Use encryption for sensitive data and secure storage practices |
+| Payment gateway integration failures | Failed transactions and customer dissatisfaction | Thoroughly test payment gateway integrations and monitor for issues |
 
 ## 7. Open Questions
 
 - What are the specific payment gateways to be integrated?
 - What are the exact requirements for the admin dashboard?
+- What are the specific email and SMS services to be used?
