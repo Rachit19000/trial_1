@@ -4,14 +4,14 @@
 
 **Project Name:** E-Commerce Platform
 
-**Description:** A web-based system enabling customers to browse, search, and purchase products online while allowing administrators and sellers to manage products, inventory, orders, and users.
+**Description:** A web-based system enabling customers to browse, search, and purchase products online, while allowing administrators and sellers to manage products, inventory, orders, and users.
 
 **Architecture Pattern:** Microservices
 
 ### Key Design Decisions
 
 - Use microservices architecture for scalability and maintainability
-- Implement RESTful APIs for communication between services
+- Implement RESTful APIs for service communication
 - Use OAuth for secure authentication and authorization
 
 ## 2. Data Model
@@ -22,11 +22,12 @@
 |-------|------|-------------|
 | id | UUID | Unique identifier for the user |
 | email | String | Email address of the user |
-| password | String | Encrypted password of the user |
+| password | String | Hashed password of the user |
 | role | String | Role of the user (Guest, Registered, Seller, Admin) |
 | created_at | Timestamp | Timestamp when the user was created |
+| updated_at | Timestamp | Timestamp when the user was last updated |
 
-**Relationships:** seller, admin, cart, orders
+**Relationships:** Cart, Order, Review
 
 ### Entity: Product
 
@@ -37,12 +38,13 @@
 | description | String | Description of the product |
 | price | Decimal | Price of the product |
 | images | String[] | List of image URLs for the product |
-| stock_quantity | Integer | Stock quantity of the product |
+| stock_quantity | Integer | Current stock quantity of the product |
 | category | String | Category of the product |
 | seller_id | UUID | Foreign key to the seller who listed the product |
 | created_at | Timestamp | Timestamp when the product was created |
+| updated_at | Timestamp | Timestamp when the product was last updated |
 
-**Relationships:** seller, orders
+**Relationships:** Seller, OrderItem
 
 ### Entity: Order
 
@@ -50,51 +52,74 @@
 |-------|------|-------------|
 | id | UUID | Unique identifier for the order |
 | user_id | UUID | Foreign key to the user who placed the order |
-| total_cost | Decimal | Total cost of the order |
-| status | String | Status of the order (Processing, Shipped, Delivered) |
+| shipping_address | String | Shipping address of the order |
+| total_cost | Decimal | Total cost of the order including tax and shipping |
+| status | String | Current status of the order (Processing, Shipped, Delivered) |
 | created_at | Timestamp | Timestamp when the order was created |
+| updated_at | Timestamp | Timestamp when the order was last updated |
 
-**Relationships:** user, items
+**Relationships:** OrderItem, User
 
-### Entity: CartItem
+### Entity: OrderItem
 
 | Field | Type | Description |
 |-------|------|-------------|
-| id | UUID | Unique identifier for the cart item |
-| product_id | UUID | Foreign key to the product in the cart |
-| quantity | Integer | Quantity of the product in the cart |
-| user_id | UUID | Foreign key to the user who added the item to the cart |
-| created_at | Timestamp | Timestamp when the cart item was added |
+| id | UUID | Unique identifier for the order item |
+| order_id | UUID | Foreign key to the order |
+| product_id | UUID | Foreign key to the product |
+| quantity | Integer | Quantity of the product in the order |
+| created_at | Timestamp | Timestamp when the order item was created |
+| updated_at | Timestamp | Timestamp when the order item was last updated |
 
-**Relationships:** user, product
+**Relationships:** Order, Product
+
+### Entity: Review
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Unique identifier for the review |
+| user_id | UUID | Foreign key to the user who wrote the review |
+| product_id | UUID | Foreign key to the product |
+| rating | Integer | Rating given by the user (1-5) |
+| comment | String | Comment written by the user |
+| created_at | Timestamp | Timestamp when the review was created |
+| updated_at | Timestamp | Timestamp when the review was last updated |
+
+**Relationships:** User, Product
 
 ## 3. API Design
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/users/register` | Register a new user |
-| POST | `/users/login` | Log in a user |
-| POST | `/users/logout` | Log out a user |
-| POST | `/users/password-reset` | Request password reset |
-| POST | `/users/oauth/google` | Login using Google OAuth |
-| POST | `/users/oauth/facebook` | Login using Facebook OAuth |
-| POST | `/products` | Add a new product |
-| PUT | `/products/{id}` | Update a product |
-| DELETE | `/products/{id}` | Delete a product |
-| GET | `/products` | Get all products |
-| GET | `/products/{category}` | Get products by category |
-| GET | `/products/search/{keyword}` | Search products by keyword |
-| GET | `/products/{id}` | Get a product by ID |
-| POST | `/carts` | Add a product to cart |
-| PUT | `/carts/{id}` | Update cart item quantity |
-| DELETE | `/carts/{id}` | Remove a cart item |
-| GET | `/carts` | Get user's cart |
-| POST | `/orders` | Create an order |
-| GET | `/orders/{id}` | Get an order by ID |
-| GET | `/orders` | Get user's order history |
-| PUT | `/orders/{id}` | Update order status |
+| POST | `/api/register` | Register a new user |
+| POST | `/api/login` | Log in a user |
+| POST | `/api/logout` | Log out a user |
+| POST | `/api/password-reset-request` | Request a password reset |
+| POST | `/api/password-reset` | Reset a user's password |
+| POST | `/api/seller/product` | Add a new product |
+| PUT | `/api/seller/product/{id}` | Update a product |
+| DELETE | `/api/seller/product/{id}` | Delete a product |
+| GET | `/api/product` | Get all products |
+| GET | `/api/product/{id}` | Get a product by ID |
+| GET | `/api/product/category/{category}` | Get products by category |
+| GET | `/api/product/search/{keyword}` | Search products by keyword |
+| GET | `/api/product/filter` | Filter products by price, rating, and availability |
+| GET | `/api/product/sort` | Sort products by price, popularity, and rating |
+| POST | `/api/cart/add` | Add a product to the cart |
+| PUT | `/api/cart/update` | Update the quantity of a product in the cart |
+| DELETE | `/api/cart/remove` | Remove a product from the cart |
+| GET | `/api/cart` | Get the current cart |
+| POST | `/api/checkout` | Confirm and process the order |
+| GET | `/api/order/{id}` | Get an order by ID |
+| GET | `/api/order/history` | Get the order history |
+| PUT | `/api/order/status` | Update the status of an order |
+| POST | `/api/review` | Write a review for a product |
+| GET | `/api/admin/users` | Get all users |
+| GET | `/api/admin/sellers` | Get all sellers |
+| GET | `/api/admin/reports` | Get sales reports |
+| GET | `/api/admin/analytics` | Get analytics data |
 
-### POST `/users/register`
+### POST `/api/register`
 
 Register a new user
 
@@ -102,15 +127,15 @@ Register a new user
 
 **Response Body:** user_id, role
 
-### POST `/users/login`
+### POST `/api/login`
 
 Log in a user
 
 **Request Body:** email, password
 
-**Response Body:** access_token, user_id, role
+**Response Body:** access_token, role
 
-### POST `/users/logout`
+### POST `/api/logout`
 
 Log out a user
 
@@ -118,39 +143,31 @@ Log out a user
 
 **Response Body:** status
 
-### POST `/users/password-reset`
+### POST `/api/password-reset-request`
 
-Request password reset
+Request a password reset
 
 **Request Body:** email
 
 **Response Body:** status
 
-### POST `/users/oauth/google`
+### POST `/api/password-reset`
 
-Login using Google OAuth
+Reset a user's password
 
-**Request Body:** code
+**Request Body:** reset_token, new_password
 
-**Response Body:** access_token, user_id, role
+**Response Body:** status
 
-### POST `/users/oauth/facebook`
-
-Login using Facebook OAuth
-
-**Request Body:** code
-
-**Response Body:** access_token, user_id, role
-
-### POST `/products`
+### POST `/api/seller/product`
 
 Add a new product
 
-**Request Body:** name, description, price, images, stock_quantity, category, seller_id
+**Request Body:** name, description, price, images, stock_quantity, category
 
 **Response Body:** product_id
 
-### PUT `/products/{id}`
+### PUT `/api/seller/product/{id}`
 
 Update a product
 
@@ -158,129 +175,175 @@ Update a product
 
 **Response Body:** status
 
-### DELETE `/products/{id}`
+### DELETE `/api/seller/product/{id}`
 
 Delete a product
 
 **Response Body:** status
 
-### GET `/products`
+### GET `/api/product`
 
 Get all products
 
 **Response Body:** products
 
-### GET `/products/{category}`
-
-Get products by category
-
-**Response Body:** products
-
-### GET `/products/search/{keyword}`
-
-Search products by keyword
-
-**Response Body:** products
-
-### GET `/products/{id}`
+### GET `/api/product/{id}`
 
 Get a product by ID
 
 **Response Body:** product
 
-### POST `/carts`
+### GET `/api/product/category/{category}`
 
-Add a product to cart
+Get products by category
+
+**Response Body:** products
+
+### GET `/api/product/search/{keyword}`
+
+Search products by keyword
+
+**Response Body:** products
+
+### GET `/api/product/filter`
+
+Filter products by price, rating, and availability
+
+**Response Body:** products
+
+### GET `/api/product/sort`
+
+Sort products by price, popularity, and rating
+
+**Response Body:** products
+
+### POST `/api/cart/add`
+
+Add a product to the cart
 
 **Request Body:** product_id, quantity
 
-**Response Body:** cart_item_id
+**Response Body:** cart_id
 
-### PUT `/carts/{id}`
+### PUT `/api/cart/update`
 
-Update cart item quantity
+Update the quantity of a product in the cart
 
-**Request Body:** quantity
-
-**Response Body:** status
-
-### DELETE `/carts/{id}`
-
-Remove a cart item
+**Request Body:** product_id, quantity
 
 **Response Body:** status
 
-### GET `/carts`
+### DELETE `/api/cart/remove`
 
-Get user's cart
+Remove a product from the cart
 
-**Response Body:** cart_items
+**Request Body:** product_id
 
-### POST `/orders`
+**Response Body:** status
 
-Create an order
+### GET `/api/cart`
 
-**Request Body:** shipping_address, cart_items
+Get the current cart
+
+**Response Body:** cart
+
+### POST `/api/checkout`
+
+Confirm and process the order
+
+**Request Body:** shipping_address
 
 **Response Body:** order_id
 
-### GET `/orders/{id}`
+### GET `/api/order/{id}`
 
 Get an order by ID
 
 **Response Body:** order
 
-### GET `/orders`
+### GET `/api/order/history`
 
-Get user's order history
+Get the order history
 
 **Response Body:** orders
 
-### PUT `/orders/{id}`
+### PUT `/api/order/status`
 
-Update order status
+Update the status of an order
 
 **Request Body:** status
 
 **Response Body:** status
 
+### POST `/api/review`
+
+Write a review for a product
+
+**Request Body:** product_id, rating, comment
+
+**Response Body:** review_id
+
+### GET `/api/admin/users`
+
+Get all users
+
+**Response Body:** users
+
+### GET `/api/admin/sellers`
+
+Get all sellers
+
+**Response Body:** sellers
+
+### GET `/api/admin/reports`
+
+Get sales reports
+
+**Response Body:** reports
+
+### GET `/api/admin/analytics`
+
+Get analytics data
+
+**Response Body:** analytics
+
 ## 4. Component Breakdown
 
 ### UserService
 
-**Responsibility:** Handles user registration, login, logout, and password reset
+**Responsibility:** Handles user registration, login, logout, and password management
 
-**Depends on:** AuthService
+**Depends on:** UserService, AuthService
 
 ### ProductService
 
 **Responsibility:** Manages product listings, updates, and deletions
 
-**Depends on:** AuthService
-
-### CartService
-
-**Responsibility:** Manages user cart items and operations
-
-**Depends on:** AuthService
+**Depends on:** ProductService, UserService
 
 ### OrderService
 
-**Responsibility:** Manages order creation, status updates, and history
+**Responsibility:** Handles cart management, checkout, and order processing
 
-**Depends on:** AuthService
+**Depends on:** OrderService, UserService, ProductService
 
-### AuthService
+### ReviewService
 
-**Responsibility:** Handles authentication and authorization
+**Responsibility:** Manages product reviews and ratings
 
-**Depends on:** UserService, ProductService, CartService, OrderService
+**Depends on:** ReviewService, UserService, ProductService
+
+### AdminService
+
+**Responsibility:** Manages user and seller administration, and provides analytics
+
+**Depends on:** AdminService, UserService, ProductService, OrderService, ReviewService
 
 ## 5. Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React.js |
+| Frontend | React |
 | Backend | Node.js with Express |
 | Database | PostgreSQL |
 | Infrastructure | AWS |
@@ -290,10 +353,11 @@ Update order status
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | High traffic during peak hours | System performance degradation | Implement load balancing and auto-scaling |
-| Data breaches | Loss of user data and trust | Implement strong encryption, regular security audits, and secure coding practices |
-| Payment gateway integration issues | Failed transactions and customer dissatisfaction | Thoroughly test payment gateway integrations and monitor for issues |
+| Data breaches | Data loss and reputation damage | Implement strong encryption, regular security audits, and secure coding practices |
+| Payment gateway integration issues | Failed transactions and customer dissatisfaction | Thoroughly test payment gateway integration and monitor for issues |
 
 ## 7. Open Questions
 
-- What are the specific payment gateways to be integrated?
-- What are the exact requirements for the admin dashboard?
+- What payment gateways will be integrated?
+- What email and SMS services will be used?
+- What logistics APIs will be integrated?
