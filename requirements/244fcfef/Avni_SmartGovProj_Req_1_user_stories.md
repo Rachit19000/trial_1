@@ -1,219 +1,113 @@
 # User Stories: E-Commerce Platform
 
-**Total User Stories:** 23
-**Estimated Effort:** 32 days
+**Total User Stories:** 10
+**Estimated Effort:** 20 days
 
 ## Sprint Week 1: Sprint 1
 
 ### US1: Users shall be able to register using email and password.
-Implement user registration functionality with email and password.
+Implement user registration functionality allowing users to create an account with email and password.
 
 **Acceptance Criteria:**
-- Users can register with a valid email and password.
-- Registration process is secure and user data is encrypted.
+- Users can enter their email and password to register.
+- User registration form includes fields for email and password.
+- Registration process is secure and stores hashed passwords.
 
 **Linked FRs:** FR-1
 
 ### US2: Users shall be able to log in and log out securely.
-Implement secure login and logout functionality.
+Implement user login and logout functionality with secure authentication.
 
 **Acceptance Criteria:**
-- Users can log in using their registered email and password.
+- Users can log in using their email and password.
 - Users can log out securely.
+- Login and logout process is secure and uses secure tokens.
 
 **Linked FRs:** FR-2
 
+## Sprint Week 2: Sprint 2
+
 ### US3: System shall support password reset via email.
-Implement password reset functionality via email.
+Implement password reset functionality allowing users to request a password reset via email.
 
 **Acceptance Criteria:**
 - Users can request a password reset via email.
-- System sends a password reset link to the user's email.
+- Email contains a secure link to reset the password.
+- Password reset process is secure and uses secure tokens.
 
 **Linked FRs:** FR-3
 
 ### US4: System shall support OAuth login (Google, Facebook).
-Implement OAuth login functionality for Google and Facebook.
+Implement OAuth login functionality allowing users to log in using Google or Facebook accounts.
 
 **Acceptance Criteria:**
-- Users can log in using their Google or Facebook account.
-- OAuth login process is secure.
+- Users can log in using Google or Facebook accounts.
+- OAuth login process is secure and uses secure tokens.
+- OAuth login integrates with Google and Facebook APIs.
 
 **Linked FRs:** FR-4
 
 ### US5: System shall encrypt stored passwords.
-Encrypt stored passwords using a secure hashing algorithm.
+Implement password encryption to ensure stored passwords are secure.
 
 **Acceptance Criteria:**
-- All stored passwords are encrypted.
-- Encryption method is secure and complies with industry standards.
+- Passwords are stored in an encrypted format.
+- Encryption algorithm is secure and up-to-date.
+- Decryption is not possible without the correct key.
 
 **Linked FRs:** FR-5
 
-## Sprint Week 2: Sprint 2
+## Sprint Week 3: Sprint 3
 
 ### US6: Sellers shall be able to add new products.
-Implement product addition functionality for sellers.
+Implement product addition functionality allowing sellers to add new products.
 
 **Acceptance Criteria:**
-- Sellers can add new products with required details.
-- Products are stored in the database.
+- Sellers can add new products.
+- Product addition form includes fields for name, description, price, images, stock quantity, and category.
+- Product addition is secure and validated.
 
 **Linked FRs:** FR-6
 
 ### US7: Sellers shall be able to update product details.
-Implement product update functionality for sellers.
+Implement product update functionality allowing sellers to modify existing products.
 
 **Acceptance Criteria:**
 - Sellers can update product details.
-- Updated product details are stored in the database.
+- Product update form includes fields for name, description, price, images, stock quantity, and category.
+- Product update is secure and validated.
 
 **Linked FRs:** FR-7
 
 ### US8: Sellers shall be able to delete products.
-Implement product deletion functionality for sellers.
+Implement product deletion functionality allowing sellers to remove products.
 
 **Acceptance Criteria:**
 - Sellers can delete products.
-- Deleted products are removed from the database.
+- Product deletion is secure and validated.
+- Product deletion is irreversible.
 
 **Linked FRs:** FR-8
 
+## Sprint Week 4: Sprint 4
+
 ### US9: Products shall contain name, description, price, images, stock quantity, category.
-Implement product details storage and retrieval.
+Implement product details functionality ensuring products have the required fields.
 
 **Acceptance Criteria:**
-- Products have all required details stored in the database.
-- Product details can be retrieved and displayed.
+- Products have a name, description, price, images, stock quantity, and category.
+- Product details are displayed correctly.
+- Product details are validated before saving.
 
 **Linked FRs:** FR-9
 
-## Sprint Week 3: Sprint 3
-
 ### US10: Admin shall approve seller products before publishing (optional).
-Implement product approval functionality for admin.
+Implement product approval functionality allowing admins to approve or reject products.
 
 **Acceptance Criteria:**
-- Admin can approve or reject seller products.
+- Admins can approve or reject products.
+- Product approval process is secure and validated.
 - Approved products are published.
+- Rejected products are not published.
 
 **Linked FRs:** FR-10
-
-### US11: Users shall browse products by category.
-Implement product browsing by category.
-
-**Acceptance Criteria:**
-- Users can browse products by category.
-- Products are displayed based on selected category.
-
-**Linked FRs:** FR-11
-
-### US12: Users shall search products by keywords.
-Implement product search by keywords.
-
-**Acceptance Criteria:**
-- Users can search products by keywords.
-- Search results are displayed based on keyword match.
-
-**Linked FRs:** FR-12
-
-### US13: Users shall filter by price, rating, availability.
-Implement product filtering by price, rating, and availability.
-
-**Acceptance Criteria:**
-- Users can filter products by price, rating, and availability.
-- Filtered products are displayed based on selected criteria.
-
-**Linked FRs:** FR-13
-
-### US14: Users shall sort by price, popularity, rating.
-Implement product sorting by price, popularity, and rating.
-
-**Acceptance Criteria:**
-- Users can sort products by price, popularity, and rating.
-- Sorted products are displayed based on selected criteria.
-
-**Linked FRs:** FR-14
-
-## Sprint Week 4: Sprint 4
-
-### US15: Users shall add products to cart.
-Implement product addition to cart functionality.
-
-**Acceptance Criteria:**
-- Users can add products to their cart.
-- Cart items are stored for logged-in users.
-
-**Linked FRs:** FR-15
-
-### US16: Users shall update quantity in cart.
-Implement cart quantity update functionality.
-
-**Acceptance Criteria:**
-- Users can update the quantity of items in their cart.
-- Updated cart items are stored.
-
-**Linked FRs:** FR-16
-
-### US17: Users shall remove items from cart.
-Implement cart item removal functionality.
-
-**Acceptance Criteria:**
-- Users can remove items from their cart.
-- Removed items are deleted from the cart.
-
-**Linked FRs:** FR-17
-
-### US18: Cart shall persist for logged-in users.
-Implement cart persistence for logged-in users.
-
-**Acceptance Criteria:**
-- Cart items persist for logged-in users across sessions.
-- Cart items are stored securely.
-
-**Linked FRs:** FR-18
-
-### US19: Users shall enter shipping address.
-Implement shipping address entry functionality.
-
-**Acceptance Criteria:**
-- Users can enter their shipping address.
-- Shipping address is stored securely.
-
-**Linked FRs:** FR-19
-
-### US20: System shall calculate total cost (tax + shipping).
-Implement total cost calculation functionality.
-
-**Acceptance Criteria:**
-- System calculates the total cost including tax and shipping.
-- Total cost is displayed to the user.
-
-**Linked FRs:** FR-20
-
-### US21: Users shall confirm order before payment.
-Implement order confirmation functionality.
-
-**Acceptance Criteria:**
-- Users can confirm their order before payment.
-- Order confirmation is stored securely.
-
-**Linked FRs:** FR-21
-
-### US22: System shall generate unique order ID.
-Implement unique order ID generation functionality.
-
-**Acceptance Criteria:**
-- System generates a unique order ID for each order.
-- Unique order ID is stored securely.
-
-**Linked FRs:** FR-22
-
-### US23: Users shall view order history.
-Implement order history viewing functionality.
-
-**Acceptance Criteria:**
-- Users can view their order history.
-- Order history is displayed securely.
-
-**Linked FRs:** FR-23
