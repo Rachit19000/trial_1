@@ -2,17 +2,17 @@
 
 ## 1. System Overview
 
-**Project Name:** Hall Management System
+**Project Name:** Movie Hall Management System
 
-**Description:** A system for managing hall bookings, user accounts, and payment processing for various events.
+**Description:** A web-based application for managing movie theatre operations including movie scheduling, ticket booking, seat management, payment processing, and reporting.
 
 **Architecture Pattern:** Microservices
 
 ### Key Design Decisions
 
 - Use microservices architecture for scalability and maintainability
-- Implement role-based access control for security
-- Utilize real-time updates for hall availability
+- Implement RESTful APIs for communication between services
+- Use a database to store application data
 
 ## 2. Data Model
 
@@ -21,168 +21,226 @@
 | Field | Type | Description |
 |-------|------|-------------|
 | id | UUID | Unique identifier for the user |
-| username | String | Username for the user |
-| password | String | Password for the user |
-| email | String | Email address for the user |
-| role | String | Role of the user (admin, staff, user) |
-| status | String | Status of the user (active, blocked, inactive) |
+| name | String | User's full name |
+| email | String | User's email address |
+| password | String | User's password (hashed) |
+| role | String | User's role (Admin or User) |
 
-**Relationships:** Hall
+**Relationships:** Show, Booking
+
+### Entity: Movie
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Unique identifier for the movie |
+| title | String | Movie title |
+| description | String | Movie description |
+| duration | Integer | Movie duration in minutes |
+| rating | Float | Movie rating |
+
+**Relationships:** Show
+
+### Entity: Show
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Unique identifier for the show |
+| movie_id | UUID | Foreign key to the Movie entity |
+| screen_id | UUID | Foreign key to the Screen entity |
+| start_time | Timestamp | Show start time |
+| end_time | Timestamp | Show end time |
+
+**Relationships:** Movie, Screen, Booking
+
+### Entity: Screen
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Unique identifier for the screen |
+| hall_id | UUID | Foreign key to the Hall entity |
+| name | String | Screen name |
+| layout | String | Seat layout in JSON format |
+
+**Relationships:** Show
 
 ### Entity: Hall
 
 | Field | Type | Description |
 |-------|------|-------------|
 | id | UUID | Unique identifier for the hall |
-| name | String | Name of the hall |
-| capacity | Integer | Maximum capacity of the hall |
-| location | String | Location of the hall |
-| facilities | String | Facilities available in the hall |
-| price_per_hour | Float | Price per hour for the hall |
-| status | String | Status of the hall (available, maintenance) |
+| name | String | Hall name |
+| capacity | Integer | Hall capacity |
 
-**Relationships:** Booking
+**Relationships:** Screen
 
 ### Entity: Booking
 
 | Field | Type | Description |
 |-------|------|-------------|
 | id | UUID | Unique identifier for the booking |
-| event_name | String | Name of the event |
-| organizer | String | Organizer of the event |
-| date | Date | Date of the booking |
-| time_start | Time | Start time of the booking |
-| time_end | Time | End time of the booking |
-| status | String | Status of the booking (pending, approved, rejected) |
-| payment_status | String | Payment status of the booking (paid, pending, refunded) |
+| user_id | UUID | Foreign key to the User entity |
+| show_id | UUID | Foreign key to the Show entity |
+| seat_ids | String | Comma-separated list of seat IDs |
+| total_amount | Float | Total amount paid for the booking |
+| status | String | Booking status (Confirmed, Cancelled, etc.) |
 
-**Relationships:** User, Hall
+**Relationships:** User, Show
 
 ## 3. API Design
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/users` | Create a new user account |
-| PUT | `/users/{id}` | Update user account details |
-| DELETE | `/users/{id}` | Delete a user account |
-| GET | `/halls` | Get a list of all halls |
-| POST | `/halls` | Add a new hall |
-| PUT | `/halls/{id}` | Update hall details |
-| DELETE | `/halls/{id}` | Delete a hall |
-| POST | `/bookings` | Request a hall booking |
-| GET | `/bookings` | Get a list of all bookings |
-| PUT | `/bookings/{id}` | Approve, reject, or modify a booking |
+| POST | `/users/register` | Register a new user |
+| POST | `/users/login` | User login |
+| POST | `/users/logout` | User logout |
+| GET | `/movies` | List all movies |
+| GET | `/movies/{movie_id}` | Get movie details |
+| POST | `/shows` | Add a new show |
+| PUT | `/shows/{show_id}` | Update show details |
+| DELETE | `/shows/{show_id}` | Delete a show |
+| GET | `/shows/{show_id}/seats` | Get seat layout for a show |
+| POST | `/bookings` | Book seats for a show |
+| GET | `/bookings/{booking_id}` | Get booking details |
+| PUT | `/bookings/{booking_id}` | Update booking details |
+| DELETE | `/bookings/{booking_id}` | Cancel a booking |
+| GET | `/admin/reports` | Get admin reports |
 
-### POST `/users`
+### POST `/users/register`
 
-Create a new user account
+Register a new user
 
-**Request Body:** username, password, email, role
+**Request Body:** User registration details
 
-**Response Body:** id, username, email, role, status
+**Response Body:** User registration confirmation
 
-### PUT `/users/{id}`
+### POST `/users/login`
 
-Update user account details
+User login
 
-**Request Body:** username, email, role, status
+**Request Body:** User login credentials
 
-**Response Body:** id, username, email, role, status
+**Response Body:** User login confirmation
 
-### DELETE `/users/{id}`
+### POST `/users/logout`
 
-Delete a user account
+User logout
 
-**Response Body:** id, status
+**Request Body:** User logout request
 
-### GET `/halls`
+**Response Body:** User logout confirmation
 
-Get a list of all halls
+### GET `/movies`
 
-**Response Body:** [{id, name, capacity, location, facilities, price_per_hour, status}]
+List all movies
 
-### POST `/halls`
+**Response Body:** List of movies
 
-Add a new hall
+### GET `/movies/{movie_id}`
 
-**Request Body:** name, capacity, location, facilities, price_per_hour
+Get movie details
 
-**Response Body:** id, name, capacity, location, facilities, price_per_hour, status
+**Response Body:** Movie details
 
-### PUT `/halls/{id}`
+### POST `/shows`
 
-Update hall details
+Add a new show
 
-**Request Body:** name, capacity, location, facilities, price_per_hour
+**Request Body:** Show details
 
-**Response Body:** id, name, capacity, location, facilities, price_per_hour, status
+**Response Body:** Show creation confirmation
 
-### DELETE `/halls/{id}`
+### PUT `/shows/{show_id}`
 
-Delete a hall
+Update show details
 
-**Response Body:** id, status
+**Request Body:** Updated show details
+
+**Response Body:** Show update confirmation
+
+### DELETE `/shows/{show_id}`
+
+Delete a show
+
+**Response Body:** Show deletion confirmation
+
+### GET `/shows/{show_id}/seats`
+
+Get seat layout for a show
+
+**Response Body:** Seat layout
 
 ### POST `/bookings`
 
-Request a hall booking
+Book seats for a show
 
-**Request Body:** event_name, organizer, date, time_start, time_end
+**Request Body:** Seat booking details
 
-**Response Body:** id, event_name, organizer, date, time_start, time_end, status, payment_status
+**Response Body:** Booking confirmation
 
-### GET `/bookings`
+### GET `/bookings/{booking_id}`
 
-Get a list of all bookings
+Get booking details
 
-**Response Body:** [{id, event_name, organizer, date, time_start, time_end, status, payment_status}]
+**Response Body:** Booking details
 
-### PUT `/bookings/{id}`
+### PUT `/bookings/{booking_id}`
 
-Approve, reject, or modify a booking
+Update booking details
 
-**Request Body:** status
+**Request Body:** Updated booking details
 
-**Response Body:** id, event_name, organizer, date, time_start, time_end, status, payment_status
+**Response Body:** Booking update confirmation
+
+### DELETE `/bookings/{booking_id}`
+
+Cancel a booking
+
+**Response Body:** Booking cancellation confirmation
+
+### GET `/admin/reports`
+
+Get admin reports
+
+**Response Body:** Admin reports
 
 ## 4. Component Breakdown
 
-### UserManagementService
+### UserService
 
-**Responsibility:** Handles user account creation, update, and deletion
+**Responsibility:** Handles user registration, login, and logout
 
 **Depends on:** UserService
 
-### HallManagementService
+### MovieService
 
-**Responsibility:** Handles hall addition, update, and deletion
+**Responsibility:** Manages movie listings and details
 
-**Depends on:** HallService
+**Depends on:** UserService
 
-### BookingService
+### ShowService
 
-**Responsibility:** Handles booking requests, approvals, and updates
+**Responsibility:** Manages show scheduling and seat availability
 
-**Depends on:** BookingService, HallService
-
-### UserService
-
-**Responsibility:** Manages user authentication and authorization
-
-### HallService
-
-**Responsibility:** Manages hall details and availability
+**Depends on:** UserService, MovieService
 
 ### BookingService
 
-**Responsibility:** Manages booking requests and statuses
+**Responsibility:** Handles seat booking and payment processing
+
+**Depends on:** UserService, ShowService
+
+### AdminService
+
+**Responsibility:** Manages admin operations and reports
+
+**Depends on:** UserService, MovieService, ShowService, BookingService
 
 ## 5. Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React |
-| Backend | Node.js with Express |
+| Frontend | React.js |
+| Backend | Spring Boot |
 | Database | PostgreSQL |
 | Infrastructure | AWS |
 
@@ -190,11 +248,11 @@ Approve, reject, or modify a booking
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| High concurrency during peak booking periods | System performance degradation | Implement load balancing and caching strategies |
-| Data breaches due to insecure data handling | Loss of sensitive data | Implement strict data encryption and access controls |
-| System downtime due to infrastructure issues | Service unavailability | Regular maintenance and monitoring |
+| Security vulnerabilities in payment processing | Financial loss and reputation damage | Use a reputable payment gateway and perform regular security audits |
+| Database performance issues | Slow response times and user frustration | Optimize database queries and use indexing |
+| Concurrency issues | Data inconsistencies and user errors | Implement proper locking mechanisms and use transactions |
 
 ## 7. Open Questions
 
-- What external payment gateways will be integrated?
-- What are the specific cancellation policies for bookings?
+- What is the exact payment gateway to be used?
+- How will user roles be managed and enforced?
